@@ -10,37 +10,30 @@ void MyMain::main()
 
 	while (true)
 	{
-		//HAL_Delay(500);
-		if (timer->getValue() >= 500)
+		if (timer->getValue() >= 1000)
 		{
-			HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
 			timer->reset();
+			HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+			HAL_Delay(100);
+			HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
 		}
 	}
 }
 
 void MyMain::extiCallback(uint16_t pin)
 {
-	//HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
 	if (timer->isRunning()) timer->stop();
 	else timer->start();
 }
 
 void MyMain::timCallback(TIM_HandleTypeDef *handle)
 {
-	if (handle == &htim10)
-	{
-		// Handle TIM10 interrupt
-		timer->tick();
-	}
+	if (handle == &htim10) timer->tick();
 }
 
 MyMain *MyMain::getInstance()
 {
-	if (!instance)
-	{
-		instance = new MyMain();
-	}
+	if (!instance) instance = new MyMain();
 
 	return instance;
 }
