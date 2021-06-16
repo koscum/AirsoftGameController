@@ -11,6 +11,8 @@ class MyMain
 public:
 	void main();
 
+	void exit() { exitCondition = true; };
+
 	void extiCallback(uint16_t pin);
 
 	void timCallback(TIM_HandleTypeDef *handle);
@@ -20,6 +22,7 @@ public:
 private:
 	MyMain();
 
+	bool exitCondition = false;
 	Timer *timer;
 
 	static MyMain *instance;

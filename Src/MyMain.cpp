@@ -1,5 +1,6 @@
 #include <tim.h>
 #include "MyMain.h"
+#include "TimerManager.h"
 
 void MyMain::main()
 {
@@ -8,22 +9,19 @@ void MyMain::main()
 
 	timer->start();
 
-	while (true)
-	{
-		if (timer->getValue() >= 1000)
-		{
-			timer->reset();
-			HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-			HAL_Delay(100);
-			HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
-		}
-	}
+	const std::function<void()> *callback = new const std::function<void()>(
+			[]() { HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5); });
+	TimerManager::getInstance()->registerCallback(timer, callback);
+
+	while (!exitCondition) {}
+
+	TimerManager::getInstance()->unregisterCallback(timer, callback);
+	delete callback;
 }
 
 void MyMain::extiCallback(uint16_t pin)
 {
-	if (timer->isRunning()) timer->stop();
-	else timer->start();
+	exit();
 }
 
 void MyMain::timCallback(TIM_HandleTypeDef *handle)
@@ -40,8 +38,7 @@ MyMain *MyMain::getInstance()
 
 MyMain::MyMain()
 {
-	// TODO: Init instance.
-	timer = new Timer();
+	timer = new Timer(1000, true, true);
 }
 
 MyMain *MyMain::instance = 0L;

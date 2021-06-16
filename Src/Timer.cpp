@@ -2,13 +2,21 @@
 // Created by koscum on 14/06/2021.
 //
 
+#include <stm32f4xx_hal.h>
 #include "Timer.h"
+#include "TimerManager.h"
 
-Timer::Timer(const uint32_t targetParam, const bool countUpParam) :
+Timer::Timer(const uint32_t targetParam, const bool countUpParam, const bool repeatParam) :
 		target(targetParam),
-		countUp(countUpParam)
+		countUp(countUpParam),
+		repeat(repeatParam)
 {
-	// TODO: Register timer.
+	TimerManager::getInstance()->registerTimer(this);
+}
+
+Timer::~Timer()
+{
+	TimerManager::getInstance()->unregisterTimer(this);
 }
 
 void Timer::tick()
@@ -41,7 +49,8 @@ void Timer::stop()
 void Timer::reset()
 {
 	previousTimestamp = HAL_GetTick();
-	value = target;
+	if (countUp) value = 0;
+	else value = target;
 }
 
 void Timer::setValue(int64_t valueParam)
@@ -63,7 +72,9 @@ void Timer::advanceTimer()
 
 void Timer::finish()
 {
-	stop();
+	if (!repeat) stop();
 
-	// TODO: Signal completion.
+	TimerManager::getInstance()->finish(this);
+
+	if (repeat) reset();
 }

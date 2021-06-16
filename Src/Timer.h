@@ -6,20 +6,24 @@
 #define AIRSOFTGAMECONTROLLER_TIMER_H
 
 #include <stdint.h>
-#include <stm32f4xx_hal.h>
 
 class Timer
 {
 public:
-	Timer(const uint32_t target = 0, const bool countUp = true);
+	Timer(const uint32_t target = 0, const bool countUp = true, const bool repeat = false);
+
+	~Timer();
 
 	void tick();
 
 	void start();
+
 	void stop();
+
 	void reset();
 
 	int64_t getValue() { return value; }
+
 	bool isRunning() { return running; }
 
 protected:
@@ -27,12 +31,14 @@ protected:
 
 private:
 	void advanceTimer();
+
 	void finish();
 
 	const uint32_t target;
-	const bool countUp = true;
-	int64_t value = 0;
+	const bool countUp;
+	const bool repeat;
 	bool running = false;
+	int64_t value = 0;
 	uint32_t previousTimestamp = 0;
 };
 
