@@ -24,7 +24,7 @@ void Timer::start()
 {
 	if (!running && (target != 0 || countUp))
 	{
-		previousTick = HAL_GetTick();
+		previousTimestamp = HAL_GetTick();
 		running = true;
 	}
 }
@@ -40,7 +40,7 @@ void Timer::stop()
 
 void Timer::reset()
 {
-	previousTick = HAL_GetTick();
+	previousTimestamp = HAL_GetTick();
 	value = target;
 }
 
@@ -52,10 +52,10 @@ void Timer::setValue(int64_t valueParam)
 
 void Timer::advanceTimer()
 {
-	uint32_t tick = HAL_GetTick();
-	uint32_t elapsed = tick - previousTick;
+	uint32_t timestamp = HAL_GetTick();
+	uint32_t elapsed = timestamp - previousTimestamp;
 
-	previousTick = tick;
+	previousTimestamp = timestamp;
 
 	if (countUp) value += elapsed;
 	else value -= elapsed;

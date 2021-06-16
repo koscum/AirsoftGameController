@@ -33,7 +33,7 @@ private:
 	const bool countUp = true;
 	int64_t value = 0;
 	bool running = false;
-	uint32_t previousTick = 0;
+	uint32_t previousTimestamp = 0;
 };
 
 
