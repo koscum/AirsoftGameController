@@ -10,22 +10,41 @@ void MyMain::init()
 
 void MyMain::main()
 {
-	auto *timer = new Timer(1000, true, true);
-	const std::function<void()> *callback = new const std::function<void()>(
-			[]() { HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5); }
+	auto *timer1 = new Timer(1000, true, true);
+	auto *timer2 = new Timer(500, true, true);
+	const std::function<void()> *callback1 = new const std::function<void()>(
+			[timer2]()
+			{
+				HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+				timer2->start();
+			}
+	);
+	const std::function<void()> *callback2 = new const std::function<void()>(
+			[timer2]()
+			{
+				HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+				timer2->stop();
+			}
 	);
 
-	TimerManager::getInstance()->registerTimer(&htim10, timer);
-	TimerManager::getInstance()->registerCallback(timer, callback);
+	TimerManager::getInstance()->registerTimer(&htim10, timer1);
+	TimerManager::getInstance()->registerTimer(&htim10, timer2);
+	TimerManager::getInstance()->registerCallback(timer1, callback1);
+	TimerManager::getInstance()->registerCallback(timer2, callback2);
 
-	timer->start();
+	timer1->start();
 
 	while (!exitCondition) {}
 
-	TimerManager::getInstance()->unregisterCallback(timer, callback);
-	TimerManager::getInstance()->unregisterTimer(&htim10, timer);
+	TimerManager::getInstance()->unregisterCallback(timer1, callback1);
+	TimerManager::getInstance()->unregisterCallback(timer2, callback2);
+	TimerManager::getInstance()->unregisterTimer(&htim10, timer1);
+	TimerManager::getInstance()->unregisterTimer(&htim10, timer2);
 
-	delete callback;
+	delete callback1;
+	delete callback2;
+	delete timer1;
+	delete timer2;
 }
 
 void MyMain::extiCallback(uint16_t pin)
