@@ -5,6 +5,7 @@
 #ifndef AIRSOFTGAMECONTROLLER_TIMER_H
 #define AIRSOFTGAMECONTROLLER_TIMER_H
 
+
 #include <cstdint>
 
 class Timer

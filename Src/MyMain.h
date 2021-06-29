@@ -1,10 +1,10 @@
 #ifndef AIRSOFTGAMECONTROLLER_MYMAIN_H
 #define AIRSOFTGAMECONTROLLER_MYMAIN_H
 
+
 #include <cstdint>
 #include <stm32f4xx_hal.h>
 #include <stm32f4xx_hal_tim.h>
-#include "Timer.h"
 
 class MyMain
 {

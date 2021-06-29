@@ -5,6 +5,7 @@
 #ifndef AIRSOFTGAMECONTROLLER_TIMERMANAGER_H
 #define AIRSOFTGAMECONTROLLER_TIMERMANAGER_H
 
+
 #include <cstdint>
 #include <functional>
 #include <map>
