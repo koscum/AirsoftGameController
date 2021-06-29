@@ -10,7 +10,7 @@
 class Timer
 {
 public:
-	explicit Timer(uint32_t target = 0, bool countUp = true, bool repeat = false);
+	explicit Timer(uint32_t _target = 0, bool _countUp = true, bool _repeat = false);
 
 	~Timer();
 
@@ -27,7 +27,7 @@ public:
 	bool isRunning() const { return running; }
 
 protected:
-	void setValue(int64_t value);
+	void setValue(int64_t _value);
 
 private:
 	void advanceTimer();
