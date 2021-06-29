@@ -9,6 +9,8 @@
 #include <functional>
 #include <map>
 #include <set>
+#include <stm32f4xx_hal.h>
+#include <stm32f4xx_hal_tim.h>
 #include "Timer.h"
 
 class TimerManager
@@ -18,17 +20,20 @@ public:
 
 	void unregisterCallback(const Timer *timer, const std::function<void()> *callback);
 
-	void registerTimer(const Timer *timer);
+	void registerTimer(const TIM_HandleTypeDef *handle, Timer *timer);
 
-	void unregisterTimer(const Timer *timer);
+	void unregisterTimer(const TIM_HandleTypeDef *handle, Timer *timer);
 
 	void finish(const Timer *timer);
+
+	void tick(const TIM_HandleTypeDef *handle);
 
 	static TimerManager *getInstance();
 
 private:
 	TimerManager();
 
+	std::map<const uintptr_t, std::set<Timer *>> timerDirectory;
 	std::map<const uintptr_t, std::set<const std::function<void()> *>> callbackDirectory;
 
 	static TimerManager *instance;

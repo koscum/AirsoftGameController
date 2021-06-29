@@ -1,5 +1,5 @@
-#ifndef MIPS_TEST_CPPWRAPPER_H
-#define MIPS_TEST_CPPWRAPPER_H
+#ifndef AIRSOFTGAMECONTROLLER_CPPWRAPPER_H
+#define AIRSOFTGAMECONTROLLER_CPPWRAPPER_H
 
 #include <stdint.h>
 #include <stm32f4xx_hal.h>
@@ -10,6 +10,7 @@ extern "C" {
 #endif
 
 void cppWrapperExtiCallback(uint16_t pin);
+void cppWrapperInit();
 void cppWrapperMain();
 void cppWrapperTimCallback(TIM_HandleTypeDef *handle);
 
@@ -17,4 +18,5 @@ void cppWrapperTimCallback(TIM_HandleTypeDef *handle);
 }
 #endif
 
-#endif //MIPS_TEST_CPPWRAPPER_H
+
+#endif //AIRSOFTGAMECONTROLLER_CPPWRAPPER_H

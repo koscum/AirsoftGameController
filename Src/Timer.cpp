@@ -2,22 +2,15 @@
 // Created by koscum on 14/06/2021.
 //
 
-#include <stm32f4xx_hal.h>
 #include "Timer.h"
 #include "TimerManager.h"
 
 Timer::Timer(const uint32_t targetParam, const bool countUpParam, const bool repeatParam) :
 		target(targetParam),
 		countUp(countUpParam),
-		repeat(repeatParam)
-{
-	TimerManager::getInstance()->registerTimer(this);
-}
+		repeat(repeatParam) {}
 
-Timer::~Timer()
-{
-	TimerManager::getInstance()->unregisterTimer(this);
-}
+Timer::~Timer() = default;
 
 void Timer::tick()
 {

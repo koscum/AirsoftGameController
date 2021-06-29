@@ -5,12 +5,12 @@
 #ifndef AIRSOFTGAMECONTROLLER_TIMER_H
 #define AIRSOFTGAMECONTROLLER_TIMER_H
 
-#include <stdint.h>
+#include <cstdint>
 
 class Timer
 {
 public:
-	Timer(const uint32_t target = 0, const bool countUp = true, const bool repeat = false);
+	explicit Timer(uint32_t target = 0, bool countUp = true, bool repeat = false);
 
 	~Timer();
 
@@ -22,9 +22,9 @@ public:
 
 	void reset();
 
-	int64_t getValue() { return value; }
+	int64_t getValue() const { return value; }
 
-	bool isRunning() { return running; }
+	bool isRunning() const { return running; }
 
 protected:
 	void setValue(int64_t value);
