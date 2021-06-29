@@ -6,56 +6,38 @@
 
 void TimerManager::registerCallback(const Timer *timer, const std::function<void()> *callback)
 {
-	for (Entry *subscription : entries)
-	{
-		if (subscription->timer != timer) continue;
-
-		subscription->callbacks.push_back(callback);
-
-		break;
-	}
+	auto iterator = callbackDirectory.find((const uintptr_t) timer);
+	if (iterator != callbackDirectory.end())
+		callbackDirectory[(const uintptr_t) timer].insert(callback);
 }
 
 void TimerManager::unregisterCallback(const Timer *timer, const std::function<void()> *callback)
 {
-	for (Entry *subscription : entries)
-	{
-		if (subscription->timer != timer) continue;
-
-		subscription->callbacks.remove(callback);
-
-		break;
-	}
+	auto iterator = callbackDirectory.find((const uintptr_t) timer);
+	if (iterator != callbackDirectory.end())
+		callbackDirectory[(const uintptr_t) timer].erase(callback);
 }
 
 void TimerManager::registerTimer(const Timer *timer)
 {
-	entries.push_back(new Entry(timer));
+	auto iterator = callbackDirectory.find((const uintptr_t) timer);
+	if (iterator == callbackDirectory.end())
+		callbackDirectory[(const uintptr_t) timer] = std::set<const std::function<void()> *>();
 }
 
 void TimerManager::unregisterTimer(const Timer *timer)
 {
-	for (Entry *entry : entries)
-	{
-		if (entry->timer != timer) continue;
-
-		entries.remove(entry);
-		delete entry;
-
-		break;
-	}
+	auto iterator = callbackDirectory.find((const uintptr_t) timer);
+	if (iterator != callbackDirectory.end())
+		callbackDirectory.erase(iterator);
 }
 
 void TimerManager::finish(const Timer *timer)
 {
-	for (Entry *entry : entries)
-	{
-		if (entry->timer != timer) continue;
+	auto iterator = callbackDirectory.find((const uintptr_t) timer);
+	if (iterator != callbackDirectory.end())
+		for (const std::function<void()> *callback : callbackDirectory[(const uintptr_t) timer]) callback->operator()();
 
-		for (const std::function<void()> *callback : entry->callbacks) callback->operator()();
-
-		break;
-	}
 }
 
 TimerManager *TimerManager::getInstance()
@@ -65,6 +47,6 @@ TimerManager *TimerManager::getInstance()
 	return instance;
 }
 
-TimerManager::TimerManager() {}
+TimerManager::TimerManager() = default;
 
-TimerManager *TimerManager::instance = 0L;
+TimerManager *TimerManager::instance = nullptr;

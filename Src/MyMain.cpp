@@ -10,7 +10,8 @@ void MyMain::main()
 	timer->start();
 
 	const std::function<void()> *callback = new const std::function<void()>(
-			[]() { HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5); });
+			[]() { HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5); }
+	);
 	TimerManager::getInstance()->registerCallback(timer, callback);
 
 	while (!exitCondition) {}
@@ -41,4 +42,4 @@ MyMain::MyMain()
 	timer = new Timer(1000, true, true);
 }
 
-MyMain *MyMain::instance = 0L;
+MyMain *MyMain::instance = nullptr;

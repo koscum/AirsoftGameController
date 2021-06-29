@@ -5,9 +5,10 @@
 #ifndef AIRSOFTGAMECONTROLLER_TIMERMANAGER_H
 #define AIRSOFTGAMECONTROLLER_TIMERMANAGER_H
 
-#include <stdint.h>
+#include <cstdint>
 #include <functional>
-#include <list>
+#include <map>
+#include <set>
 #include "Timer.h"
 
 class TimerManager
@@ -26,17 +27,9 @@ public:
 	static TimerManager *getInstance();
 
 private:
-	struct Entry
-	{
-		Entry(const Timer *timer) : timer(timer) {};
-
-		const Timer *timer;
-		std::list<const std::function<void()> *> callbacks;
-	};
-
 	TimerManager();
 
-	std::list<Entry *> entries;
+	std::map<const uintptr_t, std::set<const std::function<void()> *>> callbackDirectory;
 
 	static TimerManager *instance;
 };
