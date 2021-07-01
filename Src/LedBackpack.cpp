@@ -28,7 +28,7 @@ void LedBackpack::setBrightness(uint8_t _brightness) const
 	auto data = std::vector<uint8_t>{};
 	data.push_back(
 			LedBackpack::HT16K33_CMD_BRIGHTNESS |
-			_brightness <= LedBackpack::MAX_BRIGHTNESS ? LedBackpack::MAX_BRIGHTNESS : _brightness
+			(_brightness <= LedBackpack::MAX_BRIGHTNESS ? LedBackpack::MAX_BRIGHTNESS : _brightness)
 	);
 
 	I2cController::getInstance()->send(address, &data);
@@ -61,7 +61,7 @@ void LedBackpack::writeDisplay() const
 	I2cController::getInstance()->send(address, &data);
 }
 
-constexpr const uint8_t LedBackpack::NUMBER_TABLE[16] = {
+constexpr const std::array<uint8_t, 16> LedBackpack::NUMBER_TABLE = {
 		0x3F, /* 0 */
 		0x06, /* 1 */
 		0x5B, /* 2 */

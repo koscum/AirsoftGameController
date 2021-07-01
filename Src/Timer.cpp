@@ -9,9 +9,15 @@
 Timer::Timer(const uint32_t _target, const bool _countUp, const bool _repeat) :
 		target(_target),
 		countUp(_target == 0 || _countUp),
-		repeat(_target != 0 && _repeat) {}
+		repeat(_target != 0 && _repeat)
+{
+	TimerManager::getInstance()->registerTimer(this);
+}
 
-Timer::~Timer() = default;
+Timer::~Timer()
+{
+	TimerManager::getInstance()->unregisterTimer(this);
+}
 
 void Timer::tick()
 {

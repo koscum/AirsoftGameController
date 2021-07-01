@@ -6,7 +6,6 @@
 #define AIRSOFTGAMECONTROLLER_TIMERMANAGER_H
 
 
-#include <cstdint>
 #include <functional>
 #include <map>
 #include <set>
@@ -17,25 +16,24 @@
 class TimerManager
 {
 public:
-	void registerCallback(const Timer *timer, const std::function<void()> *callback);
+	void registerCallback(Timer *timer, const std::function<void()> *callback);
 
-	void unregisterCallback(const Timer *timer, const std::function<void()> *callback);
+	void unregisterCallback(Timer *timer, const std::function<void()> *callback);
 
-	void registerTimer(const TIM_HandleTypeDef *handle, Timer *timer);
+	void registerTimer(Timer *timer);
 
-	void unregisterTimer(const TIM_HandleTypeDef *handle, Timer *timer);
+	void unregisterTimer(Timer *timer);
 
-	void finish(const Timer *timer);
+	void finish(Timer *timer);
 
-	void tick(const TIM_HandleTypeDef *handle);
+	void tick();
 
 	static TimerManager *getInstance();
 
 private:
 	TimerManager();
 
-	std::map<const uintptr_t, std::set<Timer *>> timerDirectory;
-	std::map<const uintptr_t, std::set<const std::function<void()> *>> callbackDirectory;
+	std::map<Timer *, std::set<const std::function<void()> *>> callbackDirectory;
 
 	static TimerManager *instance;
 };

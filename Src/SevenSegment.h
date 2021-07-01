@@ -11,7 +11,7 @@
 class SevenSegment : public LedBackpack
 {
 public:
-	SevenSegment(uint16_t address);
+	explicit SevenSegment(uint16_t address);
 
 	void setDigit(uint8_t position, uint8_t value);
 

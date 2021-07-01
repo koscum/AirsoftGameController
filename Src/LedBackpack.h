@@ -20,7 +20,7 @@ public:
 		HALF_HZ = 3,
 	};
 
-	LedBackpack(const uint16_t address);
+	explicit LedBackpack(uint16_t address);
 
 	void begin();
 
@@ -30,13 +30,13 @@ public:
 
 	void clear();
 
-	void writeDisplay(void) const;
+	void writeDisplay() const;
 
 protected:
 	const uint16_t address;
 	std::array<uint8_t, 8> displayBuffer{};
 
-	static const uint8_t NUMBER_TABLE[16];
+	static const std::array<uint8_t, 16> NUMBER_TABLE;
 
 private:
 	static const uint8_t HT16K33_BLINK_CMD;
