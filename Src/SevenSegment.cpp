@@ -11,14 +11,15 @@ SevenSegment::SevenSegment(uint16_t address) :
 
 void SevenSegment::setDigit(uint8_t _position, uint8_t _value)
 {
-	displayBuffer[_position > 1 ? _position > 3 ? 4 : _position + 1 : _position] =
-			LedBackpack::NUMBER_TABLE[_value > 15 ? 15 : _value];
+	displayBuffer[digitPositionToDisplayBufferIndex(_position)] =
+			(displayBuffer[digitPositionToDisplayBufferIndex(_position)] & DOT_ON) |
+			LedBackpack::NUMBER_TABLE[_value > NUMBER_TABLE.size() - 1 ? NUMBER_TABLE.size() - 1 : _value];
 }
 
 void SevenSegment::setDot(uint8_t _position, bool _value)
 {
-	displayBuffer[_position > 1 ? _position > 3 ? 4 : _position + 1 : _position] |=
-			_value ? DOT_ON : 0x0;
+	if (_value) displayBuffer[digitPositionToDisplayBufferIndex(_position)] |= DOT_ON;
+	else displayBuffer[digitPositionToDisplayBufferIndex(_position)] &= ~DOT_ON;
 }
 
 void SevenSegment::setColon(bool _value)
@@ -28,7 +29,7 @@ void SevenSegment::setColon(bool _value)
 
 void SevenSegment::toggleDot(uint8_t _position)
 {
-	displayBuffer[_position > 1 ? _position > 3 ? 4 : _position + 1 : _position] ^= SevenSegment::DOT_ON;
+	displayBuffer[digitPositionToDisplayBufferIndex(_position)] ^= SevenSegment::DOT_ON;
 }
 
 void SevenSegment::toggleColon()
@@ -38,7 +39,7 @@ void SevenSegment::toggleColon()
 
 void SevenSegment::clearDigit(uint8_t _position)
 {
-	displayBuffer[_position > 1 ? _position > 3 ? 4 : _position + 1 : _position] &= DOT_ON;
+	displayBuffer[digitPositionToDisplayBufferIndex(_position)] &= DOT_ON;
 }
 
 void SevenSegment::writeColon() const
@@ -50,6 +51,11 @@ void SevenSegment::writeColon() const
 	data.push_back(displayBuffer[SevenSegment::COLON_BUFFER_POSITION] >> 8);
 
 	I2cController::getInstance()->send(address, &data);
+}
+
+uint8_t SevenSegment::digitPositionToDisplayBufferIndex(uint8_t _position) const
+{
+	return _position > 1 ? (_position > 3 ? 4 : _position + 1) : _position;
 }
 
 constexpr const uint8_t SevenSegment::COLON_ADDR = 0x04;

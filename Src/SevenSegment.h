@@ -28,6 +28,8 @@ public:
 	void writeColon() const;
 
 private:
+	uint8_t digitPositionToDisplayBufferIndex(uint8_t _position) const;
+
 	static const uint8_t COLON_ADDR;
 	static const uint8_t COLON_BUFFER_POSITION;
 	static const uint8_t COLON_ON;
