@@ -28,7 +28,7 @@ void LedBackpack::setBrightness(uint8_t _brightness) const
 	auto data = std::vector<uint8_t>{};
 	data.push_back(
 			LedBackpack::HT16K33_CMD_BRIGHTNESS |
-			(_brightness <= LedBackpack::MAX_BRIGHTNESS ? LedBackpack::MAX_BRIGHTNESS : _brightness)
+			(_brightness >= LedBackpack::MAX_BRIGHTNESS ? LedBackpack::MAX_BRIGHTNESS : _brightness)
 	);
 
 	I2cController::getInstance()->send(address, &data);
