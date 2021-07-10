@@ -13,7 +13,7 @@ void SevenSegment::setDigit(uint8_t _position, uint8_t _value)
 {
 	displayBuffer[digitPositionToDisplayBufferIndex(_position)] =
 			(displayBuffer[digitPositionToDisplayBufferIndex(_position)] & DOT_ON) |
-			LedBackpack::NUMBER_TABLE[_value > NUMBER_TABLE.size() - 1 ? NUMBER_TABLE.size() - 1 : _value];
+			NUMBER_TABLE[_value > NUMBER_TABLE.size() - 1 ? NUMBER_TABLE.size() - 1 : _value];
 }
 
 void SevenSegment::setDot(uint8_t _position, bool _value)

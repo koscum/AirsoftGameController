@@ -61,7 +61,7 @@ void LedBackpack::writeDisplay() const
 	I2cController::getInstance()->send(address, &data);
 }
 
-constexpr const std::array<uint8_t, 16> LedBackpack::NUMBER_TABLE = {
+constinit const std::array<uint8_t, 16> LedBackpack::NUMBER_TABLE{
 		0x3F, /* 0 */
 		0x06, /* 1 */
 		0x5B, /* 2 */
