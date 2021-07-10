@@ -1,4 +1,5 @@
 #include <tim.h>
+#include "Matrix8x8.h"
 #include "MyMain.h"
 #include "TimerManager.h"
 #include "SevenSegment.h"
@@ -16,7 +17,19 @@ void MyMain::main()
 	auto timer3 = Timer(125, true, true);
 	auto blueSegment = SevenSegment(0x74);
 	auto yellowSegment = SevenSegment(0x76);
+	auto matrix = Matrix8x8(0x70);
 	uint64_t time = 0;
+
+	const auto image = std::array<uint8_t, 8>{
+			0b00111100,
+			0b01000010,
+			0b10100101,
+			0b10000001,
+			0b10100101,
+			0b10011001,
+			0b01000010,
+			0b00111100,
+	};
 
 	uint8_t dotToggle = 0;
 
@@ -59,7 +72,7 @@ void MyMain::main()
 	);
 
 	const std::function<void()> callback3 = std::function<void()>(
-			[&blueSegment, &dotToggle, &yellowSegment]()
+			[&blueSegment, &dotToggle, &matrix, &yellowSegment]()
 			{
 				if (dotToggle > 3)
 				{
@@ -71,6 +84,9 @@ void MyMain::main()
 					yellowSegment.writeDisplay();
 				}
 
+				matrix.scroll(Matrix8x8::Direction::LEFT, 1);
+				matrix.writeDisplay();
+
 				++dotToggle;
 				dotToggle %= 8;
 			}
@@ -81,6 +97,12 @@ void MyMain::main()
 	blueSegment.setBrightness(3);
 	blueSegmentUpdate();
 	blueSegment.writeDisplay();
+
+	matrix.begin();
+	matrix.setBlinkRate(LedBackpack::BlinkRate::OFF);
+	matrix.setBrightness(3);
+	matrix.setImage(image);
+	matrix.writeDisplay();
 
 	yellowSegment.begin();
 	yellowSegment.setBlinkRate(LedBackpack::BlinkRate::OFF);
