@@ -2,17 +2,18 @@
 // Created by koscum on 01/07/2021.
 //
 
+#include <algorithm>
 #include <vector>
 #include "SevenSegment.h"
 
-SevenSegment::SevenSegment(uint16_t address) :
-		LedBackpack(address) {}
+SevenSegment::SevenSegment(uint16_t _address) :
+		LedBackpack(_address) {}
 
 void SevenSegment::setDigit(uint8_t _position, uint8_t _value)
 {
 	displayBuffer[digitPositionToDisplayBufferIndex(_position)] =
 			(displayBuffer[digitPositionToDisplayBufferIndex(_position)] & DOT_ON) |
-			NUMBER_TABLE[_value > NUMBER_TABLE.size() - 1 ? NUMBER_TABLE.size() - 1 : _value];
+			NUMBER_TABLE[std::min(_value, static_cast<uint8_t>(NUMBER_TABLE.size() - 1))];
 }
 
 void SevenSegment::setDot(uint8_t _position, bool _value)
@@ -44,12 +45,9 @@ void SevenSegment::clearDigit(uint8_t _position)
 void SevenSegment::writeColon() const
 {
 	auto data = std::vector<uint8_t>{};
-
-	data.push_back(COLON_ADDR);
 	data.push_back(displayBuffer[SevenSegment::COLON_BUFFER_POSITION] & 0xFF);
 	data.push_back(displayBuffer[SevenSegment::COLON_BUFFER_POSITION] >> 8);
-
-	send(&data);
+	writeRegister(COLON_ADR, &data);
 }
 
 uint8_t SevenSegment::digitPositionToDisplayBufferIndex(uint8_t _position) const
@@ -57,7 +55,7 @@ uint8_t SevenSegment::digitPositionToDisplayBufferIndex(uint8_t _position) const
 	return _position > 1 ? (_position > 3 ? 4 : _position + 1) : _position;
 }
 
-constexpr const uint8_t SevenSegment::COLON_ADDR = 0x04;
+constexpr const uint8_t SevenSegment::COLON_ADR = 0x04;
 constexpr const uint8_t SevenSegment::COLON_BUFFER_POSITION = 2;
 constexpr const uint8_t SevenSegment::COLON_ON = 0x02;
 constexpr const uint8_t SevenSegment::DOT_ON = 0x80;

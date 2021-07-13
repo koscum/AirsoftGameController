@@ -11,9 +11,13 @@
 class I2cController
 {
 public:
-	bool send(uint16_t _address, std::vector<uint8_t> *data);
+	bool transmit(uint16_t address, std::vector<uint8_t> *data);
 
-	std::vector<uint8_t> *receive(uint16_t _address, uint16_t _size);
+	bool writeRegister(uint16_t address, uint16_t registerAddress, std::vector<uint8_t> *data);
+
+	std::vector<uint8_t> *receive(uint16_t address, uint16_t size);
+
+	std::vector<uint8_t> *readRegister(uint16_t address, uint16_t registerAddress, uint16_t size);
 
 	static I2cController *getInstance();
 

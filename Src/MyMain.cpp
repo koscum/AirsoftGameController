@@ -1,8 +1,8 @@
 #include <tim.h>
 #include "Hardware/Matrix8x8.h"
+#include "Hardware/SevenSegment.h"
 #include "MyMain.h"
 #include "TimerManager.h"
-#include "Hardware/SevenSegment.h"
 
 void MyMain::init()
 {
@@ -101,7 +101,7 @@ void MyMain::main()
 	matrix.begin();
 	matrix.setBlinkRate(LedBackpack::BlinkRate::OFF);
 	matrix.setBrightness(3);
-	matrix.setBitmap(image);
+	matrix.setBitmap(&image);
 	matrix.writeDisplay();
 
 	yellowSegment.begin();

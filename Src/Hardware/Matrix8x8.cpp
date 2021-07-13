@@ -6,38 +6,38 @@
 #include <numeric>
 #include "Matrix8x8.h"
 
-Matrix8x8::Matrix8x8(uint16_t address) :
-		LedBackpack(address) {}
+Matrix8x8::Matrix8x8(uint16_t _address) :
+		LedBackpack(_address) {}
 
-void Matrix8x8::setBitmap(std::array<uint8_t, 8> image)
+void Matrix8x8::setBitmap(const std::array<uint8_t, 8> *_image)
 {
-	for (uint8_t i = 0; i < image.size(); ++i) displayBuffer[i] = std::rotr((unsigned char) image[i], 1);
+	for (uint8_t i = 0; i < _image->size(); ++i) displayBuffer[i] = std::rotr((*_image)[i], 1);
 }
 
-void Matrix8x8::setPixel(const uint8_t x, const uint8_t y, const bool value)
+void Matrix8x8::setPixel(const uint8_t _x, const uint8_t _y, const bool _value)
 {
-	if (value) displayBuffer[y % 8] |= std::rotr((unsigned char) (0x1 << x % 8), 1);
-	else displayBuffer[y % 8] &= ~std::rotr((unsigned char) (0x1 << x % 8), 1);
+	if (_value) displayBuffer[_y % 8] |= std::rotr(0x1u << (_x % 8), 1);
+	else displayBuffer[_y % 8] &= ~std::rotr(0x1u << (_x % 8), 1);
 }
 
-void Matrix8x8::togglePixel(const uint8_t x, const uint8_t y)
+void Matrix8x8::togglePixel(const uint8_t _x, const uint8_t _y)
 {
-	displayBuffer[y % 8] ^= std::rotr((unsigned char) (0x1 << x % 8), 1);
+	displayBuffer[_y % 8] ^= std::rotr(0x1u << (_x % 8), 1);
 }
 
-void Matrix8x8::fill(const bool value)
+void Matrix8x8::fill(const bool _value)
 {
-	for (uint8_t i = 0; i < 8; ++i) displayBuffer[i] = value ? 0xff : 0x00;
+	for (uint8_t i = 0; i < 8; ++i) displayBuffer[i] = _value ? 0xff : 0x00;
 }
 
-void Matrix8x8::scroll(Direction direction, uint8_t value)
+void Matrix8x8::scroll(Direction _direction, uint8_t _value)
 {
-	switch (direction)
+	switch (_direction)
 	{
 		case Direction::UP :
 		case Direction::DOWN :
 		{
-			const uint8_t shift = (direction == Direction::UP ? value : 8 - value) % 8;
+			const uint8_t shift = _direction == Direction::UP ? _value % 8 : 8 - _value % 8;
 			const int8_t gcd = std::gcd(shift, 8);
 
 			for (uint8_t i = 0; i < gcd; i++)
@@ -62,7 +62,7 @@ void Matrix8x8::scroll(Direction direction, uint8_t value)
 		case Direction::LEFT :
 		case Direction::RIGHT :
 		{
-			const uint8_t shift = (direction == Direction::LEFT ? value : 8 - value) % 8;
+			const uint8_t shift = _direction == Direction::LEFT ? _value % 8 : 8 - _value % 8;
 			for (uint8_t i = 0; i < 8; ++i) displayBuffer[i] = std::rotr(displayBuffer[i], shift);
 			break;
 		}

@@ -22,13 +22,13 @@ public:
 
 	explicit Matrix8x8(uint16_t address);
 
-	void setBitmap(std::array<uint8_t, 8> image);
+	void setBitmap(const std::array<uint8_t, 8> *image);
 
 	void setPixel(uint8_t x, uint8_t y, bool value);
 
 	void togglePixel(uint8_t x, uint8_t y);
 
-	void fill(bool value = 1);
+	void fill(bool value = true);
 
 	void scroll(Direction direction, uint8_t value);
 };

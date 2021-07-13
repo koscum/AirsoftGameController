@@ -11,8 +11,7 @@ void LedBackpack::begin()
 {
 	auto data = std::vector<uint8_t>{};
 	data.push_back(LedBackpack::HT16K33_CMD_OSC | 0x01);
-
-	send(&data);
+	transmit(&data);
 
 	clear();
 	writeDisplay();
@@ -25,20 +24,15 @@ void LedBackpack::begin()
 void LedBackpack::setBrightness(uint8_t _brightness) const
 {
 	auto data = std::vector<uint8_t>{};
-	data.push_back(
-			LedBackpack::HT16K33_CMD_BRIGHTNESS |
-			(_brightness >= LedBackpack::MAX_BRIGHTNESS ? LedBackpack::MAX_BRIGHTNESS : _brightness)
-	);
-
-	send(&data);
+	data.push_back(LedBackpack::HT16K33_CMD_BRIGHTNESS | std::min(_brightness, LedBackpack::MAX_BRIGHTNESS));
+	transmit(&data);
 }
 
 void LedBackpack::setBlinkRate(BlinkRate _blinkRate) const
 {
 	auto data = std::vector<uint8_t>{};
 	data.push_back(LedBackpack::HT16K33_CMD_BLINK | (static_cast<uint8_t>(_blinkRate) << 1) | 0x01);
-
-	send(&data);
+	transmit(&data);
 }
 
 void LedBackpack::clear()
@@ -49,15 +43,12 @@ void LedBackpack::clear()
 void LedBackpack::writeDisplay() const
 {
 	auto data = std::vector<uint8_t>{};
-
-	data.push_back(0x00);
 	for (auto displayValue : displayBuffer)
 	{
 		data.push_back(displayValue & 0xFF);
 		data.push_back(displayValue >> 8);
 	}
-
-	send(&data);
+	writeRegister(HT16K33_ADR_DISPLAY, &data);
 }
 
 constinit const std::array<uint8_t, 16> LedBackpack::NUMBER_TABLE{
@@ -79,6 +70,7 @@ constinit const std::array<uint8_t, 16> LedBackpack::NUMBER_TABLE{
 		0x71, /* F */
 };
 
+constexpr const uint8_t LedBackpack::HT16K33_ADR_DISPLAY = 0x00;
 constexpr const uint8_t LedBackpack::HT16K33_CMD_OSC = 0x20;
 constexpr const uint8_t LedBackpack::HT16K33_CMD_BRIGHTNESS = 0xE0;
 constexpr const uint8_t LedBackpack::HT16K33_CMD_BLINK = 0x80;

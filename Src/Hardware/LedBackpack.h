@@ -6,8 +6,8 @@
 #define AIRSOFTGAMECONTROLLER_LEDBACKPACK_H
 
 
-#include <cstdint>
 #include <array>
+#include <cstdint>
 #include "../I2c/I2cComponent.h"
 
 class LedBackpack : public I2cComponent
@@ -39,6 +39,7 @@ protected:
 	static const std::array<uint8_t, 16> NUMBER_TABLE;
 
 private:
+	static const uint8_t HT16K33_ADR_DISPLAY;
 	static const uint8_t HT16K33_CMD_BLINK;
 	static const uint8_t HT16K33_CMD_BRIGHTNESS;
 	static const uint8_t HT16K33_CMD_OSC;
