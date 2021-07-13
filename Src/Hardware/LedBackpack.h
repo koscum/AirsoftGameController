@@ -8,7 +8,7 @@
 
 #include <cstdint>
 #include <array>
-#include "I2cComponent.h"
+#include "../I2c/I2cComponent.h"
 
 class LedBackpack : public I2cComponent
 {

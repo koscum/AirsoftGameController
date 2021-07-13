@@ -1,8 +1,8 @@
 #include <tim.h>
-#include "Matrix8x8.h"
+#include "Hardware/Matrix8x8.h"
 #include "MyMain.h"
 #include "TimerManager.h"
-#include "SevenSegment.h"
+#include "Hardware/SevenSegment.h"
 
 void MyMain::init()
 {
