@@ -2,9 +2,8 @@
 // Created by koscum on 01/07/2021.
 //
 
-#include "SevenSegment.h"
-#include "I2cController.h"
 #include <vector>
+#include "SevenSegment.h"
 
 SevenSegment::SevenSegment(uint16_t address) :
 		LedBackpack(address) {}
@@ -50,7 +49,7 @@ void SevenSegment::writeColon() const
 	data.push_back(displayBuffer[SevenSegment::COLON_BUFFER_POSITION] & 0xFF);
 	data.push_back(displayBuffer[SevenSegment::COLON_BUFFER_POSITION] >> 8);
 
-	I2cController::getInstance()->send(address, &data);
+	send(&data);
 }
 
 uint8_t SevenSegment::digitPositionToDisplayBufferIndex(uint8_t _position) const
@@ -60,5 +59,5 @@ uint8_t SevenSegment::digitPositionToDisplayBufferIndex(uint8_t _position) const
 
 constexpr const uint8_t SevenSegment::COLON_ADDR = 0x04;
 constexpr const uint8_t SevenSegment::COLON_BUFFER_POSITION = 2;
-constexpr const uint8_t SevenSegment::COLON_ON = 0x2;
+constexpr const uint8_t SevenSegment::COLON_ON = 0x02;
 constexpr const uint8_t SevenSegment::DOT_ON = 0x80;

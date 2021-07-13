@@ -9,7 +9,7 @@
 Matrix8x8::Matrix8x8(uint16_t address) :
 		LedBackpack(address) {}
 
-void Matrix8x8::setImage(const std::array<uint8_t, 8> image)
+void Matrix8x8::setBitmap(std::array<uint8_t, 8> image)
 {
 	for (uint8_t i = 0; i < image.size(); ++i) displayBuffer[i] = std::rotr((unsigned char) image[i], 1);
 }

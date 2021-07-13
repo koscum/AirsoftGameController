@@ -8,8 +8,9 @@
 
 #include <cstdint>
 #include <array>
+#include "I2cComponent.h"
 
-class LedBackpack
+class LedBackpack : public I2cComponent
 {
 public:
 	enum class BlinkRate
@@ -33,15 +34,14 @@ public:
 	void writeDisplay() const;
 
 protected:
-	const uint16_t address;
 	std::array<uint8_t, 8> displayBuffer{};
 
 	static const std::array<uint8_t, 16> NUMBER_TABLE;
 
 private:
-	static const uint8_t HT16K33_BLINK_CMD;
+	static const uint8_t HT16K33_CMD_BLINK;
 	static const uint8_t HT16K33_CMD_BRIGHTNESS;
-	static const uint8_t HT16K33_OSC_CMD;
+	static const uint8_t HT16K33_CMD_OSC;
 	static const uint8_t MAX_BRIGHTNESS;
 };
 

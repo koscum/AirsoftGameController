@@ -3,17 +3,16 @@
 //
 
 #include "LedBackpack.h"
-#include "I2cController.h"
 
 LedBackpack::LedBackpack(const uint16_t _address) :
-		address(_address) {}
+		I2cComponent(_address) {}
 
 void LedBackpack::begin()
 {
 	auto data = std::vector<uint8_t>{};
-	data.push_back(LedBackpack::HT16K33_OSC_CMD | 0x01);
+	data.push_back(LedBackpack::HT16K33_CMD_OSC | 0x01);
 
-	I2cController::getInstance()->send(address, &data);
+	send(&data);
 
 	clear();
 	writeDisplay();
@@ -31,15 +30,15 @@ void LedBackpack::setBrightness(uint8_t _brightness) const
 			(_brightness >= LedBackpack::MAX_BRIGHTNESS ? LedBackpack::MAX_BRIGHTNESS : _brightness)
 	);
 
-	I2cController::getInstance()->send(address, &data);
+	send(&data);
 }
 
 void LedBackpack::setBlinkRate(BlinkRate _blinkRate) const
 {
 	auto data = std::vector<uint8_t>{};
-	data.push_back(LedBackpack::HT16K33_BLINK_CMD | (static_cast<uint8_t>(_blinkRate) << 1) | 0x01);
+	data.push_back(LedBackpack::HT16K33_CMD_BLINK | (static_cast<uint8_t>(_blinkRate) << 1) | 0x01);
 
-	I2cController::getInstance()->send(address, &data);
+	send(&data);
 }
 
 void LedBackpack::clear()
@@ -58,7 +57,7 @@ void LedBackpack::writeDisplay() const
 		data.push_back(displayValue >> 8);
 	}
 
-	I2cController::getInstance()->send(address, &data);
+	send(&data);
 }
 
 constinit const std::array<uint8_t, 16> LedBackpack::NUMBER_TABLE{
@@ -80,7 +79,7 @@ constinit const std::array<uint8_t, 16> LedBackpack::NUMBER_TABLE{
 		0x71, /* F */
 };
 
-constexpr const uint8_t LedBackpack::HT16K33_OSC_CMD = 0x20;
+constexpr const uint8_t LedBackpack::HT16K33_CMD_OSC = 0x20;
 constexpr const uint8_t LedBackpack::HT16K33_CMD_BRIGHTNESS = 0xE0;
-constexpr const uint8_t LedBackpack::HT16K33_BLINK_CMD = 0x80;
+constexpr const uint8_t LedBackpack::HT16K33_CMD_BLINK = 0x80;
 constexpr const uint8_t LedBackpack::MAX_BRIGHTNESS = 15;

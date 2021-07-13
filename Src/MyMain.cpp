@@ -101,7 +101,7 @@ void MyMain::main()
 	matrix.begin();
 	matrix.setBlinkRate(LedBackpack::BlinkRate::OFF);
 	matrix.setBrightness(3);
-	matrix.setImage(image);
+	matrix.setBitmap(image);
 	matrix.writeDisplay();
 
 	yellowSegment.begin();
