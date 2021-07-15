@@ -16,13 +16,13 @@ void Matrix8x8::setBitmap(const std::array<uint8_t, 8> *_image)
 
 void Matrix8x8::setPixel(const uint8_t _x, const uint8_t _y, const bool _value)
 {
-	if (_value) displayBuffer[_y % 8] |= std::rotr(0x1u << (_x % 8), 1);
-	else displayBuffer[_y % 8] &= ~std::rotr(0x1u << (_x % 8), 1);
+	if (_value) displayBuffer[_y % 8] |= std::rotr(static_cast<uint8_t>(0x1 << (_x % 8)), 1);
+	else displayBuffer[_y % 8] &= ~std::rotr(static_cast<uint8_t>(0x1 << (_x % 8)), 1);
 }
 
 void Matrix8x8::togglePixel(const uint8_t _x, const uint8_t _y)
 {
-	displayBuffer[_y % 8] ^= std::rotr(0x1u << (_x % 8), 1);
+	displayBuffer[_y % 8] ^= std::rotr(static_cast<uint8_t>(0x1 << (_x % 8)), 1);
 }
 
 void Matrix8x8::fill(const bool _value)
