@@ -83,11 +83,11 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
-  HAL_RCC_DeInit();
-  /* USER CODE END Init */
+	HAL_RCC_DeInit();
+	/* USER CODE END Init */
 
-  /* Configure the system clock */
-  SystemClock_Config();
+	/* Configure the system clock */
+	SystemClock_Config();
 
 	/* USER CODE BEGIN SysInit */
 
@@ -110,8 +110,8 @@ int main(void)
 		/* USER CODE END WHILE */
 
 		/* USER CODE BEGIN 3 */
-  }
-  /* USER CODE END 3 */
+	}
+	/* USER CODE END 3 */
 }
 
 /**
