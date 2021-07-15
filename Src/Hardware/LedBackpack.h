@@ -15,10 +15,10 @@ class LedBackpack : public I2cComponent
 public:
 	enum class BlinkRate
 	{
-		OFF = 0,
-		TWO_HZ = 1,
-		ONE_HZ = 2,
-		HALF_HZ = 3,
+		OFF,
+		TWO_HZ,
+		ONE_HZ,
+		HALF_HZ,
 	};
 
 	explicit LedBackpack(uint16_t address);
