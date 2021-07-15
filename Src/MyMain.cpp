@@ -141,7 +141,7 @@ void MyMain::main()
 	timer1.start();
 	timer3.start();
 
-	while (!exitCondition) {}
+	while (!exitCondition) HAL_Delay(1); // Do nothing
 
 	TimerManager::getInstance()->unregisterCallback(&timer1, &callback1);
 	TimerManager::getInstance()->unregisterCallback(&timer2, &callback2);
