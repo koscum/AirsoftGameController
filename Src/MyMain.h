@@ -19,6 +19,8 @@ public:
 
 	void timCallback(const TIM_HandleTypeDef *handle);
 
+	void i2cCpltCallback(const I2C_HandleTypeDef *handle);
+
 	static MyMain *getInstance();
 
 private:

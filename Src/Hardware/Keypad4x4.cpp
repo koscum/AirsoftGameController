@@ -3,6 +3,7 @@
 //
 
 #include <vector>
+#include <stm32f4xx_hal.h>
 #include "Keypad4x4.h"
 
 Keypad4x4::Keypad4x4(uint16_t address) :
@@ -22,14 +23,17 @@ void Keypad4x4::tick()
 	for (uint8_t i = 0; i < 4; ++i)
 	{
 		mcp23008.setMode(&READ_ROW[i]);
-		auto gpioRows = mcp23008.readGpio();
-
-		for (uint8_t j = 0; j < 4; ++j)
-		{
-			state[i * 4 + j] = (*gpioRows)[j] == Mcp23008::State::HIGH ? KeyState::PRESSED : KeyState::RELEASED;
-		}
-
-		delete gpioRows;
+		mcp23008.readGpio(new std::function<void(std::array<Mcp23008::State, 8> *)>(
+				[&, i](std::array<Mcp23008::State, 8> *gpioData)
+				{
+					for (uint8_t j = 0; j < 4; ++j)
+					{
+						state[i * 4 + j] = (*gpioData)[j] == Mcp23008::State::HIGH ?
+						                   KeyState::PRESSED :
+						                   KeyState::RELEASED;
+					}
+				}
+		));
 	}
 
 	mcp23008.setMode(&INPUT_ONLY);

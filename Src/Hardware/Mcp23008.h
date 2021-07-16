@@ -29,11 +29,13 @@ public:
 
 	void init() const;
 
-	bool setMode(const std::array<Mode, 8> *mode) const;
+	void setMode(const std::array<Mode, 8> *mode,
+	             const std::function<void()> *callback = nullptr) const;
 
-	bool setLatch(const std::array<State, 8> *state) const;
+	void setLatch(const std::array<State, 8> *state,
+	              const std::function<void()> *callback = nullptr) const;
 
-	std::array<State, 8> *readGpio() const;
+	void readGpio(const std::function<void(std::array<State, 8> *)> *callback = nullptr) const;
 
 private:
 

@@ -9,58 +9,76 @@ Mcp23008::Mcp23008(uint16_t address) :
 
 void Mcp23008::init() const
 {
-	auto data = std::vector<uint8_t>{};
-	data.push_back(MCP23008_IOCON_SEQOP);
-	writeRegister(MCP23008_ADR_IOCON, &data);
+	auto dataIocon = new std::vector<uint8_t>{};
+	dataIocon->push_back(MCP23008_IOCON_SEQOP);
+	writeRegister(MCP23008_ADR_IOCON,
+	              dataIocon);
 
-	data.clear();
-	data.push_back(0xf0);
-	writeRegister(MCP23008_ADR_IODIR, &data);
+	auto dataIodir = new std::vector<uint8_t>{};
+	dataIodir->push_back(0xf0);
+	writeRegister(MCP23008_ADR_IODIR,
+	              dataIodir);
 
-	data.clear();
-	data.push_back(0xff);
-	writeRegister(MCP23008_ADR_IPOL, &data);
+	auto dataIpol = new std::vector<uint8_t>{};
+	dataIpol->push_back(0xff);
+	writeRegister(MCP23008_ADR_IPOL,
+	              dataIpol);
 
-	data.clear();
-	data.push_back(0xff);
-	writeRegister(MCP23008_ADR_GPPU, &data);
+	auto dataGppu = new std::vector<uint8_t>{};
+	dataGppu->push_back(0xff);
+	writeRegister(MCP23008_ADR_GPPU,
+	              dataGppu);
 
-	data.clear();
-	data.push_back(0x00);
-	writeRegister(MCP23008_ADR_OLAT, &data);
+	auto dataOlat = new std::vector<uint8_t>{};
+	dataOlat->push_back(0x00);
+	writeRegister(MCP23008_ADR_OLAT,
+	              dataOlat);
 }
 
-bool Mcp23008::setMode(const std::array<Mcp23008::Mode, 8> *_mode) const
+void Mcp23008::setMode(const std::array<Mcp23008::Mode, 8> *_mode,
+                       const std::function<void()> *_callback) const
 {
 	uint8_t mode = 0x00;
 	for (uint8_t i = 0; i < 8; ++i) mode |= static_cast<uint8_t>((*_mode)[i]) << i;
 
-	auto data = std::vector<uint8_t>{};
-	data.push_back(mode);
+	auto data = new std::vector<uint8_t>{};
+	data->push_back(mode);
 
-	return writeRegister(MCP23008_ADR_IODIR, &data);
+	writeRegister(MCP23008_ADR_IODIR,
+	              data,
+	              _callback);
 }
 
-bool Mcp23008::setLatch(const std::array<Mcp23008::State, 8> *_state) const
+void Mcp23008::setLatch(const std::array<Mcp23008::State, 8> *_state,
+                        const std::function<void()> *_callback) const
 {
 	uint8_t state = 0x00;
 	for (uint8_t i = 0; i < 8; ++i) state |= static_cast<uint8_t>((*_state)[i]) << i;
 
-	auto data = std::vector<uint8_t>{};
-	data.push_back(state);
+	auto data = new std::vector<uint8_t>{};
+	data->push_back(state);
 
-	return writeRegister(MCP23008_ADR_OLAT, &data);
+	writeRegister(MCP23008_ADR_OLAT,
+	              data,
+	              _callback);
 }
 
-std::array<Mcp23008::State, 8> *Mcp23008::readGpio() const
+void Mcp23008::readGpio(const std::function<void(std::array<State, 8> *)> *_callback) const
 {
-	auto data = new std::array<State, 8>();
-
-	auto gpioData = readRegister(MCP23008_ADR_GPIO, 1);
-	for (int i = 0; i < data->size(); i++) (*data)[i] = (*gpioData)[0] & (0x1 << i) ? State::HIGH : State::LOW;
-	delete gpioData;
-
-	return data;
+	readRegister(MCP23008_ADR_GPIO,
+	             1,
+	             new std::function<void(std::vector<uint8_t> *)>(
+			             [=](std::vector<uint8_t> *gpioData)
+			             {
+				             auto data = new std::array<State, 8>();
+				             for (int i = 0; i < data->size(); i++)
+					             (*data)[i] = (*gpioData)[0] & (0x1 << i) ? State::HIGH
+					                                                      : State::LOW;
+				             (*_callback)(data);
+				             delete _callback;
+				             delete data;
+			             }
+	             ));
 }
 
 constexpr uint8_t Mcp23008::MCP23008_ADR_IODIR = 0x00;

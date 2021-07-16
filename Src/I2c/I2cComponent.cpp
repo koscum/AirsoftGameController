@@ -8,22 +8,38 @@
 I2cComponent::I2cComponent(uint16_t _address) :
 		address(_address) {}
 
-bool I2cComponent::transmit(std::vector<uint8_t> *_data) const
+void I2cComponent::transmit(std::vector<uint8_t> *_data,
+                            const std::function<void()> *_callback) const
 {
-	return I2cController::getInstance()->transmit(address, _data);
+	I2cController::getInstance()->request(new I2cController::I2cRequestTx(address,
+	                                                                      _data,
+	                                                                      _callback));
 }
 
-bool I2cComponent::writeRegister(uint16_t _registerAddress, std::vector<uint8_t> *_data) const
+void I2cComponent::writeRegister(uint16_t _registerAddress,
+                                 std::vector<uint8_t> *_data,
+                                 const std::function<void()> *_callback) const
 {
-	return I2cController::getInstance()->writeRegister(address, _registerAddress, _data);
+	I2cController::getInstance()->request(new I2cController::I2cRequestTx(address,
+	                                                                      _registerAddress,
+	                                                                      _data,
+	                                                                      _callback));
 }
 
-std::vector<uint8_t> *I2cComponent::receive(uint16_t _size) const
+void I2cComponent::receive(uint16_t _size,
+                           const std::function<void(std::vector<uint8_t> *)> *_callback) const
 {
-	return I2cController::getInstance()->receive(address, _size);
+	I2cController::getInstance()->request(new I2cController::I2cRequestRx(address,
+	                                                                      _size,
+	                                                                      _callback));
 }
 
-std::vector<uint8_t> *I2cComponent::readRegister(uint16_t _registerAddress, uint16_t _size) const
+void I2cComponent::readRegister(uint16_t _registerAddress,
+                                uint16_t _size,
+                                const std::function<void(std::vector<uint8_t> *)> *_callback) const
 {
-	return I2cController::getInstance()->readRegister(address, _registerAddress, _size);
+	I2cController::getInstance()->request(new I2cController::I2cRequestRx(address,
+	                                                                      _registerAddress,
+	                                                                      _size,
+	                                                                      _callback));
 }

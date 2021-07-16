@@ -3,15 +3,16 @@
 //
 
 #include "LedBackpack.h"
+#include <stm32f4xx_hal.h>
 
 LedBackpack::LedBackpack(const uint16_t _address) :
 		I2cComponent(_address) {}
 
 void LedBackpack::begin()
 {
-	auto data = std::vector<uint8_t>{};
-	data.push_back(LedBackpack::HT16K33_CMD_OSC | 0x01);
-	transmit(&data);
+	auto data = new std::vector<uint8_t>{};
+	data->push_back(LedBackpack::HT16K33_CMD_OSC | 0x01);
+	transmit(data);
 
 	clear();
 	writeDisplay();
@@ -23,16 +24,16 @@ void LedBackpack::begin()
 
 void LedBackpack::setBrightness(uint8_t _brightness) const
 {
-	auto data = std::vector<uint8_t>{};
-	data.push_back(LedBackpack::HT16K33_CMD_BRIGHTNESS | std::min(_brightness, LedBackpack::MAX_BRIGHTNESS));
-	transmit(&data);
+	auto data = new std::vector<uint8_t>{};
+	data->push_back(LedBackpack::HT16K33_CMD_BRIGHTNESS | std::min(_brightness, LedBackpack::MAX_BRIGHTNESS));
+	transmit(data);
 }
 
 void LedBackpack::setBlinkRate(BlinkRate _blinkRate) const
 {
-	auto data = std::vector<uint8_t>{};
-	data.push_back(LedBackpack::HT16K33_CMD_BLINK | (static_cast<uint8_t>(_blinkRate) << 1) | 0x01);
-	transmit(&data);
+	auto data = new std::vector<uint8_t>{};
+	data->push_back(LedBackpack::HT16K33_CMD_BLINK | (static_cast<uint8_t>(_blinkRate) << 1) | 0x01);
+	transmit(data);
 }
 
 void LedBackpack::clear()
@@ -42,13 +43,13 @@ void LedBackpack::clear()
 
 void LedBackpack::writeDisplay() const
 {
-	auto data = std::vector<uint8_t>{};
+	auto data = new std::vector<uint8_t>{};
 	for (auto displayValue : displayBuffer)
 	{
-		data.push_back(displayValue & 0xFF);
-		data.push_back(displayValue >> 8);
+		data->push_back(displayValue & 0xFF);
+		data->push_back(displayValue >> 8);
 	}
-	writeRegister(HT16K33_ADR_DISPLAY, &data);
+	writeRegister(HT16K33_ADR_DISPLAY, data);
 }
 
 constinit const std::array<uint8_t, 16> LedBackpack::NUMBER_TABLE{

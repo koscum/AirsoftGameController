@@ -20,3 +20,8 @@ void cppWrapperTimCallback(TIM_HandleTypeDef *handle)
 {
 	MyMain::getInstance()->timCallback(handle);
 }
+
+void cppWrapperI2cCpltCallback(I2C_HandleTypeDef *handle)
+{
+	MyMain::getInstance()->i2cCpltCallback(handle);
+}
