@@ -149,8 +149,7 @@ void I2cController::processNextRequest()
 				auto i2cPackageRx = reinterpret_cast<I2cRequestRx *>(requestQueue.front());
 				masterReceive(i2cPackageRx->getAddress(),
 				              i2cPackageRx->getBuffer(),
-				              i2cPackageRx->getSize()
-				);
+				              i2cPackageRx->getSize());
 
 				break;
 			}
@@ -160,8 +159,7 @@ void I2cController::processNextRequest()
 				memoryRead(i2cPackageRx->getAddress(),
 				           i2cPackageRx->getRegisterAddress(),
 				           i2cPackageRx->getBuffer(),
-				           i2cPackageRx->getSize()
-				);
+				           i2cPackageRx->getSize());
 
 				break;
 			}
@@ -169,8 +167,7 @@ void I2cController::processNextRequest()
 			{
 				auto i2cPackageTx = reinterpret_cast<I2cRequestTx *>(requestQueue.front());
 				masterTransmit(i2cPackageTx->getAddress(),
-				               i2cPackageTx->getData()
-				);
+				               i2cPackageTx->getData());
 
 				break;
 			}
@@ -179,8 +176,7 @@ void I2cController::processNextRequest()
 				auto i2cPackageTx = reinterpret_cast<I2cRequestTx *>(requestQueue.front());
 				memoryWrite(i2cPackageTx->getAddress(),
 				            i2cPackageTx->getRegisterAddress(),
-				            i2cPackageTx->getData()
-				);
+				            i2cPackageTx->getData());
 
 				break;
 			}
@@ -243,4 +239,4 @@ I2cController::I2cController() = default;
 
 I2cController *I2cController::instance = nullptr;
 
-constexpr const uint16_t I2cController::REQUEST_QUEUE_LIMIT = 256;
+constinit const uint16_t I2cController::REQUEST_QUEUE_LIMIT = 256;

@@ -55,7 +55,7 @@ uint8_t SevenSegment::digitPositionToDisplayBufferIndex(uint8_t _position) const
 	return _position > 1 ? (_position > 3 ? 4 : _position + 1) : _position;
 }
 
-constexpr const uint8_t SevenSegment::COLON_ADR = 0x04;
-constexpr const uint8_t SevenSegment::COLON_BUFFER_POSITION = 2;
-constexpr const uint8_t SevenSegment::COLON_ON = 0x02;
-constexpr const uint8_t SevenSegment::DOT_ON = 0x80;
+constinit const uint8_t SevenSegment::COLON_ADR = 0x04;
+constinit const uint8_t SevenSegment::COLON_BUFFER_POSITION = 2;
+constinit const uint8_t SevenSegment::COLON_ON = 0x02;
+constinit const uint8_t SevenSegment::DOT_ON = 0x80;

@@ -72,8 +72,8 @@ constinit const std::array<uint8_t, 16> LedBackpack::NUMBER_TABLE{
 		0x71, /* F */
 };
 
-constexpr const uint8_t LedBackpack::HT16K33_ADR_DISPLAY = 0x00;
-constexpr const uint8_t LedBackpack::HT16K33_CMD_OSC = 0x20;
-constexpr const uint8_t LedBackpack::HT16K33_CMD_BRIGHTNESS = 0xE0;
-constexpr const uint8_t LedBackpack::HT16K33_CMD_BLINK = 0x80;
-constexpr const uint8_t LedBackpack::MAX_BRIGHTNESS = 15;
+constinit const uint8_t LedBackpack::HT16K33_ADR_DISPLAY = 0x00;
+constinit const uint8_t LedBackpack::HT16K33_CMD_OSC = 0x20;
+constinit const uint8_t LedBackpack::HT16K33_CMD_BRIGHTNESS = 0xE0;
+constinit const uint8_t LedBackpack::HT16K33_CMD_BLINK = 0x80;
+constinit const uint8_t LedBackpack::MAX_BRIGHTNESS = 15;

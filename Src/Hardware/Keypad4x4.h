@@ -7,7 +7,6 @@
 
 
 #include <cstdint>
-#include <deque>
 #include "Mcp23008.h"
 
 class Keypad4x4
@@ -48,16 +47,9 @@ public:
 	std::array<KeyState, 16> state;
 
 private:
-	const Mcp23008 mcp23008;
+	Mcp23008 mcp23008;
 
 	//std::array<KeyState, 16> state;
-
-	static const std::array<Mcp23008::Mode, 8> INPUT_ONLY;
-	static const std::array<Mcp23008::Mode, 8> READ_COLUMNS;
-	static const std::array<Mcp23008::Mode, 8> READ_ROWS;
-	static const std::array<std::array<Mcp23008::Mode, 8>, 4> READ_ROW;
-	static const std::array<Mcp23008::State, 8> OUTPUT_COLUMNS;
-	static const std::array<std::array<Mcp23008::State, 8>, 4> OUTPUT_ROW;
 };
 
 

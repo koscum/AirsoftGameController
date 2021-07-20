@@ -27,17 +27,29 @@ public:
 
 	explicit Mcp23008(uint16_t address);
 
-	void init() const;
+	void init();
 
-	void setMode(const std::array<Mode, 8> *mode,
-	             const std::function<void()> *callback = nullptr) const;
+	uint8_t getGpio() const;
 
-	void setLatch(const std::array<State, 8> *state,
-	              const std::function<void()> *callback = nullptr) const;
+	uint8_t getMode() const;
 
-	void readGpio(const std::function<void(std::array<State, 8> *)> *callback = nullptr) const;
+	void setGpio(const uint8_t gpio,
+	             const std::function<void()> *callback = nullptr);
+
+	void setMode(const uint8_t mode,
+	             const std::function<void()> *callback = nullptr);
+
+	void readGpio(const std::function<void()> *callback = nullptr);
+
+	void readMode(const std::function<void()> *callback = nullptr);
+
+	static const uint8_t MCP23008_GPIO_MODE_INPUT;
+	static const uint8_t MCP23008_GPIO_MODE_OUTPUT;
 
 private:
+	uint8_t gpio;
+	uint8_t mode;
+
 	static const uint8_t MCP23008_ADR_IODIR;
 	static const uint8_t MCP23008_ADR_IPOL;
 	static const uint8_t MCP23008_ADR_GPINTEN;
@@ -53,6 +65,5 @@ private:
 	static const uint8_t MCP23008_MASK_GPIO_LOW;
 	static const uint8_t MCP23008_MASK_GPIO_HIGH;
 };
-
 
 #endif //AIRSOFTGAMECONTROLLER_MCP23008_H
