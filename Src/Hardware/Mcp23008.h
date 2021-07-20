@@ -38,7 +38,6 @@ public:
 	void readGpio(const std::function<void(std::array<State, 8> *)> *callback = nullptr) const;
 
 private:
-
 	static const uint8_t MCP23008_ADR_IODIR;
 	static const uint8_t MCP23008_ADR_IPOL;
 	static const uint8_t MCP23008_ADR_GPINTEN;

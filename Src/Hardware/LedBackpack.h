@@ -34,7 +34,7 @@ public:
 	void writeDisplay() const;
 
 protected:
-	std::array<uint8_t, 8> displayBuffer{};
+	std::array<uint8_t, 8> displayBuffer;
 
 	static const std::array<uint8_t, 16> NUMBER_TABLE;
 

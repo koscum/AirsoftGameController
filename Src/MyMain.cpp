@@ -15,27 +15,36 @@ void MyMain::init()
 
 void MyMain::main()
 {
-	auto timer1 = Timer(1000, true, true);
+	auto timer1 = Timer(500, true, true);
+	auto displayRefreshTimer = Timer(20, true, true);
 	auto keypadTimer = Timer(100, true, true);
+
 	auto blueSegment = SevenSegment(0x74);
 	auto keypad = Keypad4x4(0x24);
+
 	uint64_t time = 0;
 
-	const auto blueSegmentUpdate = [&blueSegment, &time]()
+	const auto blueSegmentUpdate = [&]()
 	{
-		blueSegment.setDigit(0, (time / 600) % 6);
-		blueSegment.setDigit(1, (time / 60) % 10);
-		blueSegment.setDigit(2, (time / 10) % 6);
-		blueSegment.setDigit(3, time % 10);
+		blueSegment.setDigit(0, (time / 600 / 2) % 6);
+		blueSegment.setDigit(1, (time / 60 / 2) % 10);
+		blueSegment.setDigit(2, (time / 10 / 2) % 6);
+		blueSegment.setDigit(3, time / 2 % 10);
+		blueSegment.setColon(time % 2 < 1);
 	};
+
+	const auto displayRefreshCallback = std::function<void()>(
+			[&]()
+			{
+				blueSegmentUpdate();
+				blueSegment.writeDisplay();
+			}
+	);
 
 	const std::function<void()> callback1 = std::function<void()>(
 			[&]()
 			{
 				++time;
-				blueSegmentUpdate();
-				blueSegment.toggleColon();
-				blueSegment.writeDisplay();
 			}
 	);
 
@@ -55,17 +64,21 @@ void MyMain::main()
 	keypad.init();
 
 	TimerManager::getInstance()->registerCallback(&timer1, &callback1);
+	TimerManager::getInstance()->registerCallback(&displayRefreshTimer, &displayRefreshCallback);
 	TimerManager::getInstance()->registerCallback(&keypadTimer, &keypadCallback);
 
 	timer1.start();
+	displayRefreshTimer.start();
 	keypadTimer.start();
 
 	while (!exitCondition) HAL_Delay(1); // Do nothing
 
 	keypadTimer.stop();
+	displayRefreshTimer.stop();
 	timer1.stop();
 
 	TimerManager::getInstance()->unregisterCallback(&keypadTimer, &keypadCallback);
+	TimerManager::getInstance()->unregisterCallback(&displayRefreshTimer, &displayRefreshCallback);
 	TimerManager::getInstance()->unregisterCallback(&timer1, &callback1);
 }
 

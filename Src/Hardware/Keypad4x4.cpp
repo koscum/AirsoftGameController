@@ -8,9 +8,7 @@
 
 Keypad4x4::Keypad4x4(uint16_t address) :
 		mcp23008(Mcp23008(address)),
-		state(std::array<KeyState, 16>{
-				KeyState::RELEASED,
-		}) {}
+		state(std::array<KeyState, 16>{KeyState::RELEASED}) {}
 
 void Keypad4x4::init()
 {
