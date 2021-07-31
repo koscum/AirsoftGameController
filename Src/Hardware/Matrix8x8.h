@@ -12,7 +12,7 @@
 class Matrix8x8 : public LedBackpack
 {
 public:
-	enum class Direction
+	enum class [[maybe_unused]] Direction
 	{
 		UP,
 		LEFT,
@@ -20,7 +20,13 @@ public:
 		RIGHT,
 	};
 
+	Matrix8x8() = delete;
+
 	explicit Matrix8x8(uint16_t address);
+
+	Matrix8x8(const Matrix8x8 &) = delete;
+
+	Matrix8x8 &operator=(const Matrix8x8 &) = delete;
 
 	void setBitmap(const std::array<uint8_t, 8> *image);
 

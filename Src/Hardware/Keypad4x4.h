@@ -12,13 +12,13 @@
 class Keypad4x4
 {
 public:
-	enum class KeyState
+	enum class [[maybe_unused]] KeyState
 	{
 		RELEASED = 0,
 		PRESSED,
 	};
 
-	enum class Key
+	enum class [[maybe_unused]] Key
 	{
 		ONE = 0,
 		TWO,
@@ -38,7 +38,13 @@ public:
 		D,
 	};
 
+	Keypad4x4() = delete;
+
 	explicit Keypad4x4(uint16_t address);
+
+	Keypad4x4(const Keypad4x4 &) = delete;
+
+	Keypad4x4 &operator=(const Keypad4x4 &) = delete;
 
 	void init();
 

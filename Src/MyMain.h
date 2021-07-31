@@ -9,6 +9,10 @@
 class MyMain
 {
 public:
+	MyMain(const MyMain &) = delete;
+
+	MyMain &operator=(const MyMain &) = delete;
+
 	void init();
 
 	void main();

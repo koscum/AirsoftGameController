@@ -13,30 +13,36 @@
 class Mcp23008 : public I2cComponent
 {
 public:
-	enum class Mode
+	enum class [[maybe_unused]] Mode
 	{
 		OUTPUT,
 		INPUT,
 	};
 
-	enum class State
+	enum class [[maybe_unused]] State
 	{
 		LOW,
 		HIGH,
 	};
 
+	Mcp23008() = delete;
+
 	explicit Mcp23008(uint16_t address);
+
+	Mcp23008(const Mcp23008 &) = delete;
+
+	Mcp23008 &operator=(const Mcp23008 &) = delete;
 
 	void init();
 
-	uint8_t getGpio() const;
+	[[nodiscard]] uint8_t getGpio() const;
 
-	uint8_t getMode() const;
+	[[nodiscard]] uint8_t getMode() const;
 
-	void setGpio(const uint8_t gpio,
+	void setGpio(uint8_t gpio,
 	             const std::function<void()> *callback = nullptr);
 
-	void setMode(const uint8_t mode,
+	void setMode(uint8_t mode,
 	             const std::function<void()> *callback = nullptr);
 
 	void readGpio(const std::function<void()> *callback = nullptr);

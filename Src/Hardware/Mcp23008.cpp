@@ -79,11 +79,8 @@ void Mcp23008::readGpio(const std::function<void()> *_callback)
 			             [&, _callback](std::vector<uint8_t> *gpioData)
 			             {
 				             gpio = (*gpioData)[0];
-				             if (_callback != nullptr)
-				             {
-					             (*_callback)();
-					             delete _callback;
-				             }
+				             if (_callback != nullptr) (*_callback)();
+				             delete _callback;
 			             }
 	             ));
 }
@@ -96,11 +93,8 @@ void Mcp23008::readMode(const std::function<void()> *_callback)
 			             [&, _callback](std::vector<uint8_t> *modeData)
 			             {
 				             mode = (*modeData)[0];
-				             if (_callback != nullptr)
-				             {
-					             (*_callback)();
-					             delete _callback;
-				             }
+				             if (_callback != nullptr) (*_callback)();
+				             delete _callback;
 			             }
 	             ));
 }

@@ -7,11 +7,16 @@
 
 
 #include "LedBackpack.h"
-
 class SevenSegment : public LedBackpack
 {
 public:
+	SevenSegment() = delete;
+
 	explicit SevenSegment(uint16_t address);
+
+	SevenSegment(const SevenSegment &) = delete;
+
+	SevenSegment &operator=(const SevenSegment &) = delete;
 
 	void setDigit(uint8_t position, uint8_t value);
 
@@ -28,7 +33,7 @@ public:
 	void writeColon() const;
 
 private:
-	uint8_t digitPositionToDisplayBufferIndex(uint8_t _position) const;
+	[[nodiscard]] static uint8_t digitPositionToDisplayBufferIndex(uint8_t _position);
 
 	static const uint8_t COLON_ADR;
 	static const uint8_t COLON_BUFFER_POSITION;

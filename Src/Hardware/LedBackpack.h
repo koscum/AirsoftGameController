@@ -13,7 +13,7 @@
 class LedBackpack : public I2cComponent
 {
 public:
-	enum class BlinkRate
+	enum class [[maybe_unused]] BlinkRate
 	{
 		OFF,
 		TWO_HZ,
@@ -21,7 +21,13 @@ public:
 		HALF_HZ,
 	};
 
+	LedBackpack() = delete;
+
 	explicit LedBackpack(uint16_t address);
+
+	LedBackpack(const LedBackpack &) = delete;
+
+	LedBackpack &operator=(const LedBackpack &) = delete;
 
 	void begin();
 

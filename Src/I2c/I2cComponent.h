@@ -13,7 +13,13 @@
 class I2cComponent
 {
 public:
+	I2cComponent() = delete;
+
 	explicit I2cComponent(uint16_t address);
+
+	I2cComponent(const I2cComponent &) = delete;
+
+	I2cComponent &operator=(const I2cComponent &) = delete;
 
 	void transmit(std::vector<uint8_t> *data,
 	              const std::function<void()> *callback = nullptr) const;

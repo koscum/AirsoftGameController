@@ -16,6 +16,10 @@
 class TimerManager
 {
 public:
+	TimerManager(const TimerManager &) = delete;
+
+	TimerManager &operator=(const TimerManager &) = delete;
+
 	void registerCallback(Timer *timer, const std::function<void()> *callback);
 
 	void unregisterCallback(Timer *timer, const std::function<void()> *callback);

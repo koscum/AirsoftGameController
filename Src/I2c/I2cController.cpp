@@ -15,17 +15,17 @@ I2cController::I2cRequest::I2cRequest(Type _type,
 
 I2cController::I2cRequest::~I2cRequest() noexcept = default;
 
-const I2cController::I2cRequest::Type I2cController::I2cRequest::getType() const
+I2cController::I2cRequest::Type I2cController::I2cRequest::getType() const
 {
 	return type;
 }
 
-const uint16_t I2cController::I2cRequest::getAddress() const
+uint16_t I2cController::I2cRequest::getAddress() const
 {
 	return address;
 }
 
-const uint16_t I2cController::I2cRequest::getRegisterAddress() const
+uint16_t I2cController::I2cRequest::getRegisterAddress() const
 {
 	return registerAddress;
 }
@@ -49,11 +49,11 @@ I2cController::I2cRequestRx::I2cRequestRx(uint16_t _address,
 
 I2cController::I2cRequestRx::~I2cRequestRx() noexcept
 {
-	if (buffer != nullptr) delete buffer;
-	if (callback != nullptr) delete callback;
+	delete buffer;
+	delete callback;
 }
 
-const uint16_t I2cController::I2cRequestRx::getSize() const
+uint16_t I2cController::I2cRequestRx::getSize() const
 {
 	return size;
 }
@@ -96,8 +96,8 @@ I2cController::I2cRequestTx::I2cRequestTx(uint16_t _address,
 
 I2cController::I2cRequestTx::~I2cRequestTx() noexcept
 {
-	if (data != nullptr) delete data;
-	if (callback != nullptr) delete callback;
+	delete data;
+	delete callback;
 }
 
 std::vector<uint8_t> *I2cController::I2cRequestTx::getData() const

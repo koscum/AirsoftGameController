@@ -32,11 +32,11 @@ public:
 
 		virtual ~I2cRequest() noexcept;
 
-		[[nodiscard]] const Type getType() const;
+		[[nodiscard]] Type getType() const;
 
-		[[nodiscard]] const uint16_t getAddress() const;
+		[[nodiscard]] uint16_t getAddress() const;
 
-		[[nodiscard]] const uint16_t getRegisterAddress() const;
+		[[nodiscard]] uint16_t getRegisterAddress() const;
 
 		virtual void done() = 0;
 
@@ -87,9 +87,9 @@ public:
 
 		~I2cRequestRx() noexcept override;
 
-		[[nodiscard]] const uint16_t getSize() const;
+		[[nodiscard]] uint16_t getSize() const;
 
-		uint8_t *getBuffer();
+		[[nodiscard]] uint8_t *getBuffer();
 
 		void done() override;
 
@@ -100,11 +100,15 @@ public:
 		uint8_t *buffer;
 	};
 
+	I2cController(const I2cController &) = delete;
+
+	I2cController &operator=(const I2cController &) = delete;
+
 	bool request(I2cRequest *i2cRequest);
 
 	void requestCompleted();
 
-	static I2cController *getInstance();
+	[[nodiscard]] static I2cController *getInstance();
 
 private:
 	I2cController();

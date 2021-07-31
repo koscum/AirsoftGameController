@@ -11,7 +11,13 @@
 class Timer
 {
 public:
+	Timer() = delete;
+
 	explicit Timer(uint32_t _target = 0, bool _countUp = true, bool _repeat = false);
+
+	Timer(const Timer &) = delete;
+
+	Timer &operator=(const Timer &) = delete;
 
 	~Timer();
 
@@ -23,9 +29,9 @@ public:
 
 	void reset();
 
-	int64_t getValue() const { return value; }
+	[[nodiscard]] int64_t getValue() const { return value; }
 
-	bool isRunning() const { return running; }
+	[[nodiscard]] bool isRunning() const { return running; }
 
 protected:
 	void setValue(int64_t _value);

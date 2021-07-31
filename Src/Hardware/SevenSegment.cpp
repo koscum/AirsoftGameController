@@ -50,7 +50,7 @@ void SevenSegment::writeColon() const
 	writeRegister(COLON_ADR, &data);
 }
 
-uint8_t SevenSegment::digitPositionToDisplayBufferIndex(uint8_t _position) const
+uint8_t SevenSegment::digitPositionToDisplayBufferIndex(uint8_t _position)
 {
 	return _position > 1 ? (_position > 3 ? 4 : _position + 1) : _position;
 }
