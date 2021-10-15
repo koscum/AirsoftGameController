@@ -15,6 +15,8 @@ void MyMain::init()
 
 void MyMain::main()
 {
+	auto i2cController = I2cController::getInstance();
+
 	auto timer1 = Timer(500, true, true);
 	auto displayRefreshTimer = Timer(20, true, true);
 	auto keypadTimer = Timer(100, true, true);
@@ -71,7 +73,11 @@ void MyMain::main()
 	displayRefreshTimer.start();
 	keypadTimer.start();
 
-	while (!exitCondition) HAL_Delay(1); // Do nothing
+	while (!exitCondition)
+	{
+		i2cController->tick();
+		HAL_Delay(1); // Do nothing
+	}
 
 	keypadTimer.stop();
 	displayRefreshTimer.stop();

@@ -11,7 +11,8 @@ I2cController::I2cRequest::I2cRequest(Type _type,
                                       uint16_t _registerAddress) :
 		type(_type),
 		address(_address),
-		registerAddress(_registerAddress) {}
+		registerAddress(_registerAddress),
+		state(State::IN_PROGRESS) {}
 
 I2cController::I2cRequest::~I2cRequest() noexcept = default;
 
@@ -28,6 +29,16 @@ uint16_t I2cController::I2cRequest::getAddress() const
 uint16_t I2cController::I2cRequest::getRegisterAddress() const
 {
 	return registerAddress;
+}
+
+I2cController::I2cRequest::State I2cController::I2cRequest::getState() const
+{
+	return state;
+}
+
+void I2cController::I2cRequest::setState(State _state)
+{
+	state = _state;
 }
 
 I2cController::I2cRequestRx::I2cRequestRx(uint16_t _address,
@@ -49,7 +60,7 @@ I2cController::I2cRequestRx::I2cRequestRx(uint16_t _address,
 
 I2cController::I2cRequestRx::~I2cRequestRx() noexcept
 {
-	delete buffer;
+	delete[] buffer;
 	delete callback;
 }
 
@@ -110,13 +121,11 @@ void I2cController::I2cRequestTx::done()
 	if (callback != nullptr) (*callback)();
 }
 
-bool I2cController::request(I2cRequest *_i2cRequest)
+bool I2cController::request(I2cRequest *_request)
 {
 	if (requestQueue.size() < REQUEST_QUEUE_LIMIT)
 	{
-		requestQueue.push(_i2cRequest);
-
-		if (requestQueue.size() == 1) processNextRequest();
+		requestQueue.push(_request);
 
 		return true;
 	} else
@@ -127,60 +136,81 @@ bool I2cController::request(I2cRequest *_i2cRequest)
 	return false;
 }
 
-void I2cController::requestCompleted()
-{
-	auto i2cRequest = requestQueue.front();
-	requestQueue.pop();
-
-	i2cRequest->done();
-	delete i2cRequest;
-
-	if (!requestQueue.empty()) processNextRequest();
-}
-
-void I2cController::processNextRequest()
+void I2cController::tick()
 {
 	if (!requestQueue.empty())
 	{
-		switch (requestQueue.front()->getType())
+		auto request = requestQueue.front();
+		switch (request->getState())
 		{
-			case I2cRequest::Type::RX:
+			case I2cRequest::State::READY:
 			{
-				auto i2cPackageRx = reinterpret_cast<I2cRequestRx *>(requestQueue.front());
-				masterReceive(i2cPackageRx->getAddress(),
-				              i2cPackageRx->getBuffer(),
-				              i2cPackageRx->getSize());
+				request->setState(I2cRequest::State::IN_PROGRESS);
+
+				switch (request->getType())
+				{
+					case I2cRequest::Type::RX:
+					{
+						auto requestRx = reinterpret_cast<I2cRequestRx *>(request);
+						masterReceive(requestRx->getAddress(),
+						              requestRx->getBuffer(),
+						              requestRx->getSize());
+
+						break;
+					}
+					case I2cRequest::Type::RX_MEM:
+					{
+						auto requestRx = reinterpret_cast<I2cRequestRx *>(request);
+						memoryRead(requestRx->getAddress(),
+						           requestRx->getRegisterAddress(),
+						           requestRx->getBuffer(),
+						           requestRx->getSize());
+
+						break;
+					}
+					case I2cRequest::Type::TX:
+					{
+						auto requestTx = reinterpret_cast<I2cRequestTx *>(request);
+						masterTransmit(requestTx->getAddress(),
+						               requestTx->getData());
+
+						break;
+					}
+					case I2cRequest::Type::TX_MEM:
+					{
+						auto requestTx = reinterpret_cast<I2cRequestTx *>(request);
+						memoryWrite(requestTx->getAddress(),
+						            requestTx->getRegisterAddress(),
+						            requestTx->getData());
+
+						break;
+					}
+				}
 
 				break;
 			}
-			case I2cRequest::Type::RX_MEM:
+			case I2cRequest::State::COMPLETED:
 			{
-				auto i2cPackageRx = reinterpret_cast<I2cRequestRx *>(requestQueue.front());
-				memoryRead(i2cPackageRx->getAddress(),
-				           i2cPackageRx->getRegisterAddress(),
-				           i2cPackageRx->getBuffer(),
-				           i2cPackageRx->getSize());
+				requestQueue.pop();
+
+				request->done();
+				delete request;
 
 				break;
 			}
-			case I2cRequest::Type::TX:
-			{
-				auto i2cPackageTx = reinterpret_cast<I2cRequestTx *>(requestQueue.front());
-				masterTransmit(i2cPackageTx->getAddress(),
-				               i2cPackageTx->getData());
-
+			default:
 				break;
-			}
-			case I2cRequest::Type::TX_MEM:
-			{
-				auto i2cPackageTx = reinterpret_cast<I2cRequestTx *>(requestQueue.front());
-				memoryWrite(i2cPackageTx->getAddress(),
-				            i2cPackageTx->getRegisterAddress(),
-				            i2cPackageTx->getData());
-
-				break;
-			}
 		}
+	}
+}
+
+void I2cController::requestCompleted()
+{
+	if (!requestQueue.empty())
+	{
+		auto request = requestQueue.front();
+
+		request->setState(I2cRequest::State::COMPLETED);
 	}
 }
 

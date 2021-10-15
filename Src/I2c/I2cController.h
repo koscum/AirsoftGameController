@@ -30,6 +30,13 @@ public:
 			RX_MEM,
 		};
 
+		enum class State
+		{
+			READY,
+			IN_PROGRESS,
+			COMPLETED,
+		};
+
 		virtual ~I2cRequest() noexcept;
 
 		[[nodiscard]] Type getType() const;
@@ -37,6 +44,10 @@ public:
 		[[nodiscard]] uint16_t getAddress() const;
 
 		[[nodiscard]] uint16_t getRegisterAddress() const;
+
+		[[nodiscard]] State getState() const;
+
+		void setState(State state);
 
 		virtual void done() = 0;
 
@@ -48,6 +59,8 @@ public:
 		const Type type;
 		const uint16_t address;
 		const uint16_t registerAddress;
+
+		State state;
 	};
 
 	class I2cRequestTx : public I2cRequest
@@ -106,14 +119,14 @@ public:
 
 	bool request(I2cRequest *i2cRequest);
 
+	void tick();
+
 	void requestCompleted();
 
 	[[nodiscard]] static I2cController *getInstance();
 
 private:
 	I2cController();
-
-	void processNextRequest();
 
 	void masterTransmit(uint16_t _address,
 	                    std::vector<uint8_t> *_data);
