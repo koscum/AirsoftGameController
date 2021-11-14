@@ -12,7 +12,7 @@ I2cController::I2cRequest::I2cRequest(Type _type,
 		type(_type),
 		address(_address),
 		registerAddress(_registerAddress),
-		state(State::IN_PROGRESS) {}
+		state(State::READY) {}
 
 I2cController::I2cRequest::~I2cRequest() noexcept = default;
 
