@@ -2,6 +2,7 @@
 #define AIRSOFTGAMECONTROLLER_MYMAIN_H
 
 
+#include <atomic>
 #include <cstdint>
 #include <stm32f4xx_hal.h>
 #include <stm32f4xx_hal_tim.h>
@@ -29,6 +30,9 @@ public:
 
 private:
 	MyMain();
+
+	std::atomic_bool doTimerTick = false;
+	std::atomic_bool doI2cRequestCompleted = false;
 
 	bool exitCondition = false;
 

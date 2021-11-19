@@ -75,8 +75,16 @@ void MyMain::main()
 
 	while (!exitCondition)
 	{
+		if (doTimerTick.exchange(false))
+		{
+			TimerManager::getInstance()->tick();
+		}
+		if (doI2cRequestCompleted.exchange(false))
+		{
+			I2cController::getInstance()->requestCompleted();
+		}
+
 		i2cController->tick();
-		HAL_Delay(1); // Do nothing
 	}
 
 	keypadTimer.stop();
@@ -95,12 +103,12 @@ void MyMain::extiCallback(uint16_t pin)
 
 void MyMain::timCallback(const TIM_HandleTypeDef *handle)
 {
-	if (handle == &htim10) TimerManager::getInstance()->tick();
+	if (handle == &htim10) doTimerTick = true;
 }
 
 void MyMain::i2cCpltCallback(const I2C_HandleTypeDef *handle)
 {
-	if (handle == &hi2c1) I2cController::getInstance()->requestCompleted();
+	if (handle == &hi2c1) doI2cRequestCompleted = true;
 }
 
 MyMain *MyMain::getInstance()

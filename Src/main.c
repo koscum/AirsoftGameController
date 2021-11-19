@@ -87,6 +87,16 @@ void HAL_I2C_MemRxCpltCallback(I2C_HandleTypeDef *hi2c)
 {
 	cppWrapperI2cCpltCallback(hi2c);
 }
+
+void HAL_I2C_ErrorCallback(I2C_HandleTypeDef *hi2c)
+{
+	cppWrapperI2cCpltCallback(hi2c);
+}
+
+void HAL_I2C_AbortCpltCallback(I2C_HandleTypeDef *hi2c)
+{
+	cppWrapperI2cCpltCallback(hi2c);
+}
 /* USER CODE END 0 */
 
 /**
