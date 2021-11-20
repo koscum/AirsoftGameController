@@ -6,6 +6,7 @@
 #define AIRSOFTGAMECONTROLLER_I2CCOMPONENT_H
 
 
+#include <atomic>
 #include <cstdint>
 #include <functional>
 #include <vector>
@@ -20,6 +21,10 @@ public:
 	I2cComponent(const I2cComponent &) = delete;
 
 	I2cComponent &operator=(const I2cComponent &) = delete;
+
+	bool busy();
+
+	void ready();
 
 	void transmit(std::vector<uint8_t> *data,
 	              const std::function<void()> *callback = nullptr) const;
@@ -37,6 +42,8 @@ public:
 
 private:
 	const uint16_t address;
+
+	std::atomic_bool isBusy;
 };
 
 

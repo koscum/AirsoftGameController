@@ -6,7 +6,18 @@
 #include "I2cController.h"
 
 I2cComponent::I2cComponent(uint16_t _address) :
-		address(_address) {}
+		address(_address),
+		isBusy(false) {}
+
+bool I2cComponent::busy()
+{
+	isBusy.exchange(true);
+}
+
+void I2cComponent::ready()
+{
+	isBusy = false;
+}
 
 void I2cComponent::transmit(std::vector<uint8_t> *_data,
                             const std::function<void()> *_callback) const

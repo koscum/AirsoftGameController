@@ -37,7 +37,7 @@ public:
 
 	void clear();
 
-	void writeDisplay() const;
+	void writeDisplay();
 
 protected:
 	std::array<uint8_t, 8> displayBuffer;

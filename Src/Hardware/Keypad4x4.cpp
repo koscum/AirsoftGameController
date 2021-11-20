@@ -17,20 +17,25 @@ void Keypad4x4::init()
 
 void Keypad4x4::tick()
 {
-	for (uint8_t i = 0; i < 4; ++i)
+	if (!mcp23008.busy())
 	{
-		mcp23008.setGpio((~(0x10 << i) & 0xf0) | (mcp23008.getGpio() & 0x0f));
-		mcp23008.readGpio(new std::function<void()>(
-				[&, i]()
-				{
-					auto gpio = mcp23008.getGpio();
-					for (uint8_t j = 0; j < 4; ++j)
+		for (uint8_t i = 0; i < 4; ++i)
+		{
+			mcp23008.setGpio((~(0x10 << i) & 0xf0) | (mcp23008.getGpio() & 0x0f));
+			mcp23008.readGpio(new std::function<void()>(
+					[&, i]()
 					{
-						state[i * 4 + j] = gpio & (0x1 << j) ?
-						                   KeyState::RELEASED :
-						                   KeyState::PRESSED;
+						auto gpio = mcp23008.getGpio();
+						for (uint8_t j = 0; j < 4; ++j)
+						{
+							state[i * 4 + j] = gpio & (0x1 << j) ?
+							                   KeyState::RELEASED :
+							                   KeyState::PRESSED;
+						}
+
+						if (i == 3) mcp23008.ready();
 					}
-				}
-		));
+			));
+		}
 	}
 }

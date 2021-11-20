@@ -42,15 +42,25 @@ void LedBackpack::clear()
 	for (uint8_t &i : displayBuffer) i = 0x00;
 }
 
-void LedBackpack::writeDisplay() const
+void LedBackpack::writeDisplay()
 {
-	auto data = new std::vector<uint8_t>{};
-	for (auto displayValue : displayBuffer)
+	if (!busy())
 	{
-		data->push_back(displayValue & 0xFF);
-		data->push_back(displayValue >> 8);
+		auto data = new std::vector<uint8_t>{};
+		for (auto displayValue: displayBuffer)
+		{
+			data->push_back(displayValue & 0xFF);
+			data->push_back(displayValue >> 8);
+		}
+		writeRegister(HT16K33_ADR_DISPLAY,
+		              data,
+		              new std::function<void()>(
+				              [&]()
+				              {
+					              ready();
+				              }
+		              ));
 	}
-	writeRegister(HT16K33_ADR_DISPLAY, data);
 }
 
 constinit const std::array<uint8_t, 16> LedBackpack::NUMBER_TABLE{
