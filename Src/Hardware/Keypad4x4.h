@@ -1,7 +1,3 @@
-//
-// Created by koscum on 13/07/2021.
-//
-
 #ifndef AIRSOFTGAMECONTROLLER_KEYPAD4X4_H
 #define AIRSOFTGAMECONTROLLER_KEYPAD4X4_H
 
@@ -44,11 +40,11 @@ public:
 
 	Keypad4x4(const Keypad4x4 &) = delete;
 
-	Keypad4x4 &operator=(const Keypad4x4 &) = delete;
+	auto operator=(const Keypad4x4 &) -> Keypad4x4 & = delete;
 
-	void init();
+	auto init() -> void;
 
-	void tick();
+	auto tick() -> void;
 
 	std::array<KeyState, 16> state;
 

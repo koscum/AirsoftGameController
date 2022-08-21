@@ -1,7 +1,3 @@
-//
-// Created by koscum on 14/06/2021.
-//
-
 #include <limits>
 #include "Timer.h"
 #include "TimerManager.h"
@@ -19,12 +15,12 @@ Timer::~Timer()
 	TimerManager::getInstance()->unregisterTimer(this);
 }
 
-void Timer::tick()
+auto Timer::tick() -> void
 {
 	if (running) advanceTimer();
 }
 
-void Timer::start()
+auto Timer::start() -> void
 {
 	if (!running)
 	{
@@ -33,7 +29,7 @@ void Timer::start()
 	}
 }
 
-void Timer::stop()
+auto Timer::stop() -> void
 {
 	if (running)
 	{
@@ -42,20 +38,20 @@ void Timer::stop()
 	}
 }
 
-void Timer::reset()
+auto Timer::reset() -> void
 {
 	previousTimestamp = HAL_GetTick();
 	if (countUp) value = 0;
 	else value = target;
 }
 
-void Timer::setValue(int64_t _value)
+auto Timer::setValue(int64_t _value) -> void
 {
 	value = _value;
 	if (target != 0 && countUp ? value >= target : value <= 0) finish();
 }
 
-void Timer::advanceTimer()
+auto Timer::advanceTimer() -> void
 {
 	uint32_t timestamp = HAL_GetTick();
 	uint32_t elapsed =
@@ -71,7 +67,7 @@ void Timer::advanceTimer()
 	setValue(countUp ? value + elapsed : value - elapsed);
 }
 
-void Timer::finish()
+auto Timer::finish() -> void
 {
 	if (repeat) reset();
 	else stop();

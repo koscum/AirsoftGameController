@@ -1,51 +1,47 @@
-//
-// Created by koscum on 16/06/2021.
-//
-
 #include "TimerManager.h"
 
-void TimerManager::registerCallback(Timer *timer, const std::function<void()> *callback)
+auto TimerManager::registerCallback(Timer *timer, const std::function<void()> *callback) -> void
 {
 	auto iterator = callbackDirectory.find(timer);
 	if (iterator != callbackDirectory.end())
 		iterator->second.insert(callback);
 }
 
-void TimerManager::unregisterCallback(Timer *timer, const std::function<void()> *callback)
+auto TimerManager::unregisterCallback(Timer *timer, const std::function<void()> *callback) -> void
 {
 	auto iterator = callbackDirectory.find(timer);
 	if (iterator != callbackDirectory.end())
 		iterator->second.erase(callback);
 }
 
-void TimerManager::registerTimer(Timer *timer)
+auto TimerManager::registerTimer(Timer *timer) -> void
 {
 	auto callbackIterator = callbackDirectory.find(timer);
 	if (callbackIterator == callbackDirectory.end())
 		callbackDirectory[timer] = std::set<const std::function<void()> *>();
 }
 
-void TimerManager::unregisterTimer(Timer *timer)
+auto TimerManager::unregisterTimer(Timer *timer) -> void
 {
 	auto callbackIterator = callbackDirectory.find(timer);
 	if (callbackIterator != callbackDirectory.end())
 		callbackDirectory.erase(callbackIterator);
 }
 
-void TimerManager::finish(Timer *timer)
+auto TimerManager::finish(Timer *timer) -> void
 {
 	auto iterator = callbackDirectory.find(timer);
 	if (iterator != callbackDirectory.end())
-		for (const std::function<void()> *callback : iterator->second) callback->operator()();
+		for (const std::function<void()> *callback: iterator->second) callback->operator()();
 
 }
 
-void TimerManager::tick()
+auto TimerManager::tick() -> void
 {
-	for (auto iterator : callbackDirectory) iterator.first->tick();
+	for (auto iterator: callbackDirectory) iterator.first->tick();
 }
 
-TimerManager *TimerManager::getInstance()
+auto TimerManager::getInstance() -> TimerManager *
 {
 	if (!instance) instance = new TimerManager();
 

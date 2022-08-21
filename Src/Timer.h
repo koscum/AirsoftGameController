@@ -1,7 +1,3 @@
-//
-// Created by koscum on 14/06/2021.
-//
-
 #ifndef AIRSOFTGAMECONTROLLER_TIMER_H
 #define AIRSOFTGAMECONTROLLER_TIMER_H
 
@@ -17,29 +13,29 @@ public:
 
 	Timer(const Timer &) = delete;
 
-	Timer &operator=(const Timer &) = delete;
+	auto operator=(const Timer &) -> Timer & = delete;
 
 	~Timer();
 
-	void tick();
+	auto tick() -> void;
 
-	void start();
+	auto start() -> void;
 
-	void stop();
+	auto stop() -> void;
 
-	void reset();
+	auto reset() -> void;
 
-	[[nodiscard]] int64_t getValue() const { return value; }
+	[[nodiscard]] auto getValue() const -> int64_t { return value; }
 
-	[[nodiscard]] bool isRunning() const { return running; }
+	[[nodiscard]] auto isRunning() const -> bool { return running; }
 
 protected:
-	void setValue(int64_t _value);
+	auto setValue(int64_t _value) -> void;
 
 private:
-	void advanceTimer();
+	auto advanceTimer() -> void;
 
-	void finish();
+	auto finish() -> void;
 
 	const uint32_t target;
 	const bool countUp;

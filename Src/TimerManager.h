@@ -1,7 +1,3 @@
-//
-// Created by koscum on 16/06/2021.
-//
-
 #ifndef AIRSOFTGAMECONTROLLER_TIMERMANAGER_H
 #define AIRSOFTGAMECONTROLLER_TIMERMANAGER_H
 
@@ -18,21 +14,22 @@ class TimerManager
 public:
 	TimerManager(const TimerManager &) = delete;
 
-	TimerManager &operator=(const TimerManager &) = delete;
+	auto operator=(const TimerManager &) -> TimerManager & = delete;
 
-	void registerCallback(Timer *timer, const std::function<void()> *callback);
+	auto registerCallback(Timer *timer, const std::function<void()> *callback) -> void;
 
-	void unregisterCallback(Timer *timer, const std::function<void()> *callback);
+	auto unregisterCallback(Timer *timer, const std::function<void()> *callback) -> void;
 
-	void registerTimer(Timer *timer);
+	auto registerTimer(Timer *timer) -> void;
 
-	void unregisterTimer(Timer *timer);
+	auto unregisterTimer(Timer *timer) -> void;
 
-	void finish(Timer *timer);
+	auto finish(Timer *timer) -> void;
 
-	void tick();
+	auto tick() -> void;
 
-	static TimerManager *getInstance();
+
+	static auto getInstance() -> TimerManager *;
 
 private:
 	TimerManager();

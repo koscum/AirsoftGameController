@@ -1,7 +1,3 @@
-//
-// Created by koscum on 29/06/2021.
-//
-
 #ifndef AIRSOFTGAMECONTROLLER_I2CCONTROLLER_H
 #define AIRSOFTGAMECONTROLLER_I2CCONTROLLER_H
 
@@ -39,17 +35,17 @@ public:
 
 		virtual ~I2cRequest() noexcept;
 
-		[[nodiscard]] Type getType() const;
+		[[nodiscard]] auto getType() const -> Type;
 
-		[[nodiscard]] uint16_t getAddress() const;
+		[[nodiscard]] auto getAddress() const -> uint16_t;
 
-		[[nodiscard]] uint16_t getRegisterAddress() const;
+		[[nodiscard]] auto getRegisterAddress() const -> uint16_t;
 
-		[[nodiscard]] State getState() const;
+		[[nodiscard]] auto getState() const -> State;
 
-		void setState(State state);
+		auto setState(State state) -> void;
 
-		virtual void done() = 0;
+		virtual auto done() -> void = 0;
 
 	protected:
 		explicit I2cRequest(Type type,
@@ -77,9 +73,9 @@ public:
 
 		~I2cRequestTx() noexcept override;
 
-		[[nodiscard]] std::vector<uint8_t> *getData() const;
+		[[nodiscard]] auto getData() const -> std::vector<uint8_t> *;
 
-		void done() override;
+		auto done() -> void override;
 
 	private:
 		std::vector<uint8_t> *data;
@@ -100,11 +96,11 @@ public:
 
 		~I2cRequestRx() noexcept override;
 
-		[[nodiscard]] uint16_t getSize() const;
+		[[nodiscard]] auto getSize() const -> uint16_t;
 
-		[[nodiscard]] uint8_t *getBuffer();
+		[[nodiscard]] auto getBuffer() -> uint8_t *;
 
-		void done() override;
+		auto done() -> void override;
 
 	private:
 		const uint16_t size;
@@ -115,34 +111,34 @@ public:
 
 	I2cController(const I2cController &) = delete;
 
-	I2cController &operator=(const I2cController &) = delete;
+	auto operator=(const I2cController &) -> I2cController & = delete;
 
-	bool request(I2cRequest *i2cRequest);
+	auto request(I2cRequest *i2cRequest) -> bool;
 
-	void tick();
+	auto tick() -> void;
 
-	void requestCompleted();
+	auto requestCompleted() -> void;
 
-	[[nodiscard]] static I2cController *getInstance();
+	[[nodiscard]] static auto getInstance() -> I2cController *;
 
 private:
 	I2cController();
 
-	void masterTransmit(uint16_t _address,
-	                    std::vector<uint8_t> *_data);
+	auto masterTransmit(uint16_t _address,
+	                    std::vector<uint8_t> *_data) -> void;
 
-	void memoryWrite(uint16_t _address,
+	auto memoryWrite(uint16_t _address,
 	                 uint16_t _registerAddress,
-	                 std::vector<uint8_t> *_data);
+	                 std::vector<uint8_t> *_data) -> void;
 
-	void masterReceive(uint16_t _address,
+	auto masterReceive(uint16_t _address,
 	                   uint8_t *_buffer,
-	                   uint16_t _size);
+	                   uint16_t _size) -> void;
 
-	void memoryRead(uint16_t _address,
+	auto memoryRead(uint16_t _address,
 	                uint16_t _registerAddress,
 	                uint8_t *_buffer,
-	                uint16_t _size);
+	                uint16_t _size) -> void;
 
 	std::queue<I2cRequest *> requestQueue;
 

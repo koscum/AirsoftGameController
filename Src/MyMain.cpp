@@ -8,15 +8,16 @@
 #include "MyMain.h"
 #include "TimerManager.h"
 
-void MyMain::init()
+auto MyMain::init() -> void
 {
 	HAL_TIM_Base_Start_IT(&htim10); // Start TIM10 under Interrupt
 	HAL_TIM_OC_Start(&htim10, TIM_CHANNEL_1);
 }
 
-void MyMain::main()
+auto MyMain::main() -> void
 {
 	auto i2cController = I2cController::getInstance();
+	auto timerManager = TimerManager::getInstance();
 
 	auto timer1 = Timer(500, true, true);
 	auto displayRefreshTimer = Timer(20, true, true);
@@ -74,7 +75,7 @@ void MyMain::main()
 			}
 	);
 
-	const std::function<void()> callback1 = std::function<void()>(
+	const auto callback1 = std::function<void()>(
 			[&]()
 			{
 				++time;
@@ -82,7 +83,7 @@ void MyMain::main()
 			}
 	);
 
-	const std::function<void()> keypadCallback = std::function<void()>(
+	const auto keypadCallback = std::function<void()>(
 			[&]()
 			{
 				keypad.tick();
@@ -103,14 +104,14 @@ void MyMain::main()
 
 	keypad.init();
 
-	TimerManager::getInstance()->registerCallback(&timer1,
-	                                              &callback1);
-	TimerManager::getInstance()->registerCallback(&displayRefreshTimer,
-	                                              &displayRefreshCallback);
-	TimerManager::getInstance()->registerCallback(&yellowSegmentRandomTimer,
-	                                              &yellowSegmentRandomCallback);
-	TimerManager::getInstance()->registerCallback(&keypadTimer,
-	                                              &keypadCallback);
+	timerManager->registerCallback(&timer1,
+	                               &callback1);
+	timerManager->registerCallback(&displayRefreshTimer,
+	                               &displayRefreshCallback);
+	timerManager->registerCallback(&yellowSegmentRandomTimer,
+	                               &yellowSegmentRandomCallback);
+	timerManager->registerCallback(&keypadTimer,
+	                               &keypadCallback);
 
 	timer1.start();
 	yellowSegmentRandomTimer.start();
@@ -121,11 +122,11 @@ void MyMain::main()
 	{
 		if (doTimerTick.exchange(false))
 		{
-			TimerManager::getInstance()->tick();
+			timerManager->tick();
 		}
 		if (doI2cRequestCompleted.exchange(false))
 		{
-			I2cController::getInstance()->requestCompleted();
+			i2cController->requestCompleted();
 		}
 
 		i2cController->tick();
@@ -136,32 +137,32 @@ void MyMain::main()
 	yellowSegmentRandomTimer.stop();
 	timer1.stop();
 
-	TimerManager::getInstance()->unregisterCallback(&keypadTimer,
-	                                                &keypadCallback);
-	TimerManager::getInstance()->unregisterCallback(&displayRefreshTimer,
-	                                                &displayRefreshCallback);
-	TimerManager::getInstance()->unregisterCallback(&yellowSegmentRandomTimer,
-	                                                &yellowSegmentRandomCallback);
-	TimerManager::getInstance()->unregisterCallback(&timer1,
-	                                                &callback1);
+	timerManager->unregisterCallback(&keypadTimer,
+	                                 &keypadCallback);
+	timerManager->unregisterCallback(&displayRefreshTimer,
+	                                 &displayRefreshCallback);
+	timerManager->unregisterCallback(&yellowSegmentRandomTimer,
+	                                 &yellowSegmentRandomCallback);
+	timerManager->unregisterCallback(&timer1,
+	                                 &callback1);
 }
 
-void MyMain::extiCallback(uint16_t pin)
+auto MyMain::externalInterruptCallback(uint16_t pin) -> void
 {
 	exit();
 }
 
-void MyMain::timCallback(const TIM_HandleTypeDef *handle)
+auto MyMain::timCallback(const TIM_HandleTypeDef *handle) -> void
 {
 	if (handle == &htim10) doTimerTick = true;
 }
 
-void MyMain::i2cCpltCallback(const I2C_HandleTypeDef *handle)
+auto MyMain::i2cCompletedCallback(const I2C_HandleTypeDef *handle) -> void
 {
 	if (handle == &hi2c1) doI2cRequestCompleted = true;
 }
 
-MyMain *MyMain::getInstance()
+auto MyMain::getInstance() -> MyMain *
 {
 	if (!instance) instance = new MyMain();
 

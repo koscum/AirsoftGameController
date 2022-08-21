@@ -1,7 +1,3 @@
-//
-// Created by koscum on 09/07/2021.
-//
-
 #ifndef AIRSOFTGAMECONTROLLER_MATRIX8X8_H
 #define AIRSOFTGAMECONTROLLER_MATRIX8X8_H
 
@@ -26,17 +22,17 @@ public:
 
 	Matrix8x8(const Matrix8x8 &) = delete;
 
-	Matrix8x8 &operator=(const Matrix8x8 &) = delete;
+	auto operator=(const Matrix8x8 &) -> Matrix8x8 & = delete;
 
-	void setBitmap(const std::array<uint8_t, 8> *image);
+	auto setBitmap(const std::array<uint8_t, 8> *image) -> void;
 
-	void setPixel(uint8_t x, uint8_t y, bool value);
+	auto setPixel(uint8_t x, uint8_t y, bool value) -> void;
 
-	void togglePixel(uint8_t x, uint8_t y);
+	auto togglePixel(uint8_t x, uint8_t y) -> void;
 
-	void fill(bool value = true);
+	auto fill(bool value = true) -> void;
 
-	void scroll(Direction direction, uint8_t value);
+	auto scroll(Direction direction, uint8_t value) -> void;
 };
 
 

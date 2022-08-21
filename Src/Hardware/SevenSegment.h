@@ -1,12 +1,9 @@
-//
-// Created by koscum on 01/07/2021.
-//
-
 #ifndef AIRSOFTGAMECONTROLLER_SEVENSEGMENT_H
 #define AIRSOFTGAMECONTROLLER_SEVENSEGMENT_H
 
 
 #include "LedBackpack.h"
+
 class SevenSegment : public LedBackpack
 {
 public:
@@ -16,24 +13,24 @@ public:
 
 	SevenSegment(const SevenSegment &) = delete;
 
-	SevenSegment &operator=(const SevenSegment &) = delete;
+	auto operator=(const SevenSegment &) -> SevenSegment & = delete;
 
-	void setDigit(uint8_t position, uint8_t value);
+	auto setDigit(uint8_t position, uint8_t value) -> void;
 
-	void setDot(uint8_t position, bool value);
+	auto setDot(uint8_t position, bool value) -> void;
 
-	void setColon(bool value);
+	auto setColon(bool value) -> void;
 
-	void toggleDot(uint8_t position);
+	auto toggleDot(uint8_t position) -> void;
 
-	void toggleColon();
+	auto toggleColon() -> void;
 
-	void clearDigit(uint8_t position);
+	auto clearDigit(uint8_t position) -> void;
 
-	void writeColon() const;
+	auto writeColon() const -> void;
 
 private:
-	[[nodiscard]] static uint8_t digitPositionToDisplayBufferIndex(uint8_t _position);
+	[[nodiscard]] static auto digitPositionToDisplayBufferIndex(uint8_t _position) -> uint8_t;
 
 	static const uint8_t COLON_ADR;
 	static const uint8_t COLON_BUFFER_POSITION;

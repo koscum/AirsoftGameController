@@ -3,7 +3,7 @@
 
 void cppWrapperExtiCallback(uint16_t pin)
 {
-	MyMain::getInstance()->extiCallback(pin);
+	MyMain::getInstance()->externalInterruptCallback(pin);
 }
 
 void cppWrapperInit()
@@ -23,5 +23,5 @@ void cppWrapperTimCallback(TIM_HandleTypeDef *handle)
 
 void cppWrapperI2cCpltCallback(I2C_HandleTypeDef *handle)
 {
-	MyMain::getInstance()->i2cCpltCallback(handle);
+	MyMain::getInstance()->i2cCompletedCallback(handle);
 }

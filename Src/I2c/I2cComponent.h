@@ -1,7 +1,3 @@
-//
-// Created by koscum on 13/07/2021.
-//
-
 #ifndef AIRSOFTGAMECONTROLLER_I2CCOMPONENT_H
 #define AIRSOFTGAMECONTROLLER_I2CCOMPONENT_H
 
@@ -20,25 +16,25 @@ public:
 
 	I2cComponent(const I2cComponent &) = delete;
 
-	I2cComponent &operator=(const I2cComponent &) = delete;
+	auto operator=(const I2cComponent &) -> I2cComponent & = delete;
 
-	bool busy();
+	auto busy() -> bool;
 
-	void ready();
+	auto ready() -> void;
 
-	void transmit(std::vector<uint8_t> *data,
-	              const std::function<void()> *callback = nullptr) const;
+	auto transmit(std::vector<uint8_t> *data,
+	              const std::function<void()> *callback = nullptr) const -> void;
 
-	void writeRegister(uint16_t registerAddress,
+	auto writeRegister(uint16_t registerAddress,
 	                   std::vector<uint8_t> *data,
-	                   const std::function<void()> *callback = nullptr) const;
+	                   const std::function<void()> *callback = nullptr) const -> void;
 
-	void receive(uint16_t size,
-	             const std::function<void(std::vector<uint8_t> *)> *callback = nullptr) const;
+	auto receive(uint16_t size,
+	             const std::function<void(std::vector<uint8_t> *)> *callback = nullptr) const -> void;
 
-	void readRegister(uint16_t registerAddress,
+	auto readRegister(uint16_t registerAddress,
 	                  uint16_t size,
-	                  const std::function<void(std::vector<uint8_t> *)> *callback = nullptr) const;
+	                  const std::function<void(std::vector<uint8_t> *)> *callback = nullptr) const -> void;
 
 private:
 	const uint16_t address;

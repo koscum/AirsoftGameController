@@ -1,7 +1,3 @@
-//
-// Created by koscum on 13/07/2021.
-//
-
 #include "I2cComponent.h"
 #include "I2cController.h"
 
@@ -9,27 +5,27 @@ I2cComponent::I2cComponent(uint16_t _address) :
 		address(_address),
 		isBusy(false) {}
 
-bool I2cComponent::busy()
+auto I2cComponent::busy() -> bool
 {
-	isBusy.exchange(true);
+	return isBusy.exchange(true);
 }
 
-void I2cComponent::ready()
+auto I2cComponent::ready() -> void
 {
 	isBusy = false;
 }
 
-void I2cComponent::transmit(std::vector<uint8_t> *_data,
-                            const std::function<void()> *_callback) const
+auto I2cComponent::transmit(std::vector<uint8_t> *_data,
+                            const std::function<void()> *_callback) const -> void
 {
 	I2cController::getInstance()->request(new I2cController::I2cRequestTx(address,
 	                                                                      _data,
 	                                                                      _callback));
 }
 
-void I2cComponent::writeRegister(uint16_t _registerAddress,
+auto I2cComponent::writeRegister(uint16_t _registerAddress,
                                  std::vector<uint8_t> *_data,
-                                 const std::function<void()> *_callback) const
+                                 const std::function<void()> *_callback) const -> void
 {
 	I2cController::getInstance()->request(new I2cController::I2cRequestTx(address,
 	                                                                      _registerAddress,
@@ -37,17 +33,17 @@ void I2cComponent::writeRegister(uint16_t _registerAddress,
 	                                                                      _callback));
 }
 
-void I2cComponent::receive(uint16_t _size,
-                           const std::function<void(std::vector<uint8_t> *)> *_callback) const
+auto I2cComponent::receive(uint16_t _size,
+                           const std::function<void(std::vector<uint8_t> *)> *_callback) const -> void
 {
 	I2cController::getInstance()->request(new I2cController::I2cRequestRx(address,
 	                                                                      _size,
 	                                                                      _callback));
 }
 
-void I2cComponent::readRegister(uint16_t _registerAddress,
+auto I2cComponent::readRegister(uint16_t _registerAddress,
                                 uint16_t _size,
-                                const std::function<void(std::vector<uint8_t> *)> *_callback) const
+                                const std::function<void(std::vector<uint8_t> *)> *_callback) const -> void
 {
 	I2cController::getInstance()->request(new I2cController::I2cRequestRx(address,
 	                                                                      _registerAddress,

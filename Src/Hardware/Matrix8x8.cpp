@@ -1,7 +1,3 @@
-//
-// Created by koscum on 09/07/2021.
-//
-
 #include <bit>
 #include <numeric>
 #include "Matrix8x8.h"
@@ -9,28 +5,28 @@
 Matrix8x8::Matrix8x8(uint16_t _address) :
 		LedBackpack(_address) {}
 
-void Matrix8x8::setBitmap(const std::array<uint8_t, 8> *_image)
+auto Matrix8x8::setBitmap(const std::array<uint8_t, 8> *_image) -> void
 {
 	for (unsigned int i = 0; i < _image->size(); ++i) displayBuffer[i] = std::rotr((*_image)[i], 1);
 }
 
-void Matrix8x8::setPixel(const uint8_t _x, const uint8_t _y, const bool _value)
+auto Matrix8x8::setPixel(const uint8_t _x, const uint8_t _y, const bool _value) -> void
 {
 	if (_value) displayBuffer[_y % 8] |= std::rotr(static_cast<uint8_t>(0x1 << (_x % 8)), 1);
 	else displayBuffer[_y % 8] &= ~std::rotr(static_cast<uint8_t>(0x1 << (_x % 8)), 1);
 }
 
-void Matrix8x8::togglePixel(const uint8_t _x, const uint8_t _y)
+auto Matrix8x8::togglePixel(const uint8_t _x, const uint8_t _y) -> void
 {
 	displayBuffer[_y % 8] ^= std::rotr(static_cast<uint8_t>(0x1 << (_x % 8)), 1);
 }
 
-void Matrix8x8::fill(const bool _value)
+auto Matrix8x8::fill(const bool _value) -> void
 {
 	for (uint8_t i = 0; i < 8; ++i) displayBuffer[i] = _value ? 0xff : 0x00;
 }
 
-void Matrix8x8::scroll(Direction _direction, uint8_t _value)
+auto Matrix8x8::scroll(Direction _direction, uint8_t _value) -> void
 {
 	switch (_direction)
 	{

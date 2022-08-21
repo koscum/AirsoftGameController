@@ -1,7 +1,3 @@
-//
-// Created by koscum on 12/07/2021.
-//
-
 #include "Mcp23008.h"
 
 Mcp23008::Mcp23008(uint16_t address) :
@@ -9,7 +5,7 @@ Mcp23008::Mcp23008(uint16_t address) :
 		mode(MCP23008_GPIO_MODE_INPUT),
 		gpio(0x00) {}
 
-void Mcp23008::init()
+auto Mcp23008::init() -> void
 {
 	auto dataIocon = new std::vector<uint8_t>{};
 	dataIocon->push_back(MCP23008_IOCON_SEQOP);
@@ -35,18 +31,18 @@ void Mcp23008::init()
 	setGpio(gpio);
 }
 
-uint8_t Mcp23008::getGpio() const
+auto Mcp23008::getGpio() const -> uint8_t
 {
 	return gpio;
 }
 
-uint8_t Mcp23008::getMode() const
+auto Mcp23008::getMode() const -> uint8_t
 {
 	return mode;
 }
 
-void Mcp23008::setGpio(const uint8_t _gpio,
-                       const std::function<void()> *_callback)
+auto Mcp23008::setGpio(const uint8_t _gpio,
+                       const std::function<void()> *_callback) -> void
 {
 	gpio = _gpio;
 
@@ -58,8 +54,8 @@ void Mcp23008::setGpio(const uint8_t _gpio,
 	              _callback);
 }
 
-void Mcp23008::setMode(const uint8_t _mode,
-                       const std::function<void()> *_callback)
+auto Mcp23008::setMode(const uint8_t _mode,
+                       const std::function<void()> *_callback) -> void
 {
 	mode = _mode;
 
@@ -71,7 +67,7 @@ void Mcp23008::setMode(const uint8_t _mode,
 	              _callback);
 }
 
-void Mcp23008::readGpio(const std::function<void()> *_callback)
+auto Mcp23008::readGpio(const std::function<void()> *_callback) -> void
 {
 	readRegister(MCP23008_ADR_GPIO,
 	             1,
@@ -85,7 +81,7 @@ void Mcp23008::readGpio(const std::function<void()> *_callback)
 	             ));
 }
 
-void Mcp23008::readMode(const std::function<void()> *_callback)
+auto Mcp23008::readMode(const std::function<void()> *_callback) -> void
 {
 	readRegister(MCP23008_ADR_IODIR,
 	             1,

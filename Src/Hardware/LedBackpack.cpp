@@ -1,7 +1,3 @@
-//
-// Created by koscum on 01/07/2021.
-//
-
 #include "LedBackpack.h"
 #include <stm32f4xx_hal.h>
 
@@ -9,7 +5,7 @@ LedBackpack::LedBackpack(const uint16_t _address) :
 		I2cComponent(_address),
 		displayBuffer(std::array<uint8_t, 8>{0x00}) {}
 
-void LedBackpack::begin()
+auto LedBackpack::begin() -> void
 {
 	auto data = new std::vector<uint8_t>{};
 	data->push_back(LedBackpack::HT16K33_CMD_OSC | 0x01);
@@ -23,26 +19,26 @@ void LedBackpack::begin()
 	setBrightness(15);
 }
 
-void LedBackpack::setBrightness(uint8_t _brightness) const
+auto LedBackpack::setBrightness(uint8_t _brightness) const -> void
 {
 	auto data = new std::vector<uint8_t>{};
 	data->push_back(LedBackpack::HT16K33_CMD_BRIGHTNESS | std::min(_brightness, LedBackpack::MAX_BRIGHTNESS));
 	transmit(data);
 }
 
-void LedBackpack::setBlinkRate(BlinkRate _blinkRate) const
+auto LedBackpack::setBlinkRate(BlinkRate _blinkRate) const -> void
 {
 	auto data = new std::vector<uint8_t>{};
 	data->push_back(LedBackpack::HT16K33_CMD_BLINK | (static_cast<uint8_t>(_blinkRate) << 1) | 0x01);
 	transmit(data);
 }
 
-void LedBackpack::clear()
+auto LedBackpack::clear() -> void
 {
-	for (uint8_t &i : displayBuffer) i = 0x00;
+	for (uint8_t &i: displayBuffer) i = 0x00;
 }
 
-void LedBackpack::writeDisplay()
+auto LedBackpack::writeDisplay() -> void
 {
 	if (!busy())
 	{

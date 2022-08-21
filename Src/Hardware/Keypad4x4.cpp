@@ -1,7 +1,3 @@
-//
-// Created by koscum on 13/07/2021.
-//
-
 #include <stm32f4xx_hal.h>
 #include "Keypad4x4.h"
 
@@ -9,13 +5,13 @@ Keypad4x4::Keypad4x4(uint16_t address) :
 		mcp23008(Mcp23008(address)),
 		state(std::array<KeyState, 16>{KeyState::RELEASED}) {}
 
-void Keypad4x4::init()
+auto Keypad4x4::init() -> void
 {
 	mcp23008.init();
 	mcp23008.setMode(0x0f);
 }
 
-void Keypad4x4::tick()
+auto Keypad4x4::tick() -> void
 {
 	if (!mcp23008.busy())
 	{
@@ -33,7 +29,9 @@ void Keypad4x4::tick()
 							                   KeyState::PRESSED;
 						}
 
-						if (i == 3) mcp23008.ready();
+						if (i == 3)
+							mcp23008.
+									        ready();
 					}
 			));
 		}

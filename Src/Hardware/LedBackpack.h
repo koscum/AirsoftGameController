@@ -1,7 +1,3 @@
-//
-// Created by koscum on 01/07/2021.
-//
-
 #ifndef AIRSOFTGAMECONTROLLER_LEDBACKPACK_H
 #define AIRSOFTGAMECONTROLLER_LEDBACKPACK_H
 
@@ -27,17 +23,17 @@ public:
 
 	LedBackpack(const LedBackpack &) = delete;
 
-	LedBackpack &operator=(const LedBackpack &) = delete;
+	auto operator=(const LedBackpack &) -> LedBackpack & = delete;
 
-	void begin();
+	auto begin() -> void;
 
-	void setBrightness(uint8_t brightness) const;
+	auto setBrightness(uint8_t brightness) const -> void;
 
-	void setBlinkRate(BlinkRate blinkRate) const;
+	auto setBlinkRate(BlinkRate blinkRate) const -> void;
 
-	void clear();
+	auto clear() -> void;
 
-	void writeDisplay();
+	auto writeDisplay() -> void;
 
 protected:
 	std::array<uint8_t, 8> displayBuffer;

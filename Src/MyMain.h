@@ -12,21 +12,21 @@ class MyMain
 public:
 	MyMain(const MyMain &) = delete;
 
-	MyMain &operator=(const MyMain &) = delete;
+	auto operator=(const MyMain &) -> MyMain & = delete;
 
-	void init();
+	auto init() -> void;
 
-	void main();
+	auto main() -> void;
 
-	void exit() { exitCondition = true; };
+	auto exit() -> void { exitCondition = true; };
 
-	void extiCallback(uint16_t pin);
+	auto externalInterruptCallback(uint16_t pin) -> void;
 
-	void timCallback(const TIM_HandleTypeDef *handle);
+	auto timCallback(const TIM_HandleTypeDef *handle) -> void;
 
-	void i2cCpltCallback(const I2C_HandleTypeDef *handle);
+	auto i2cCompletedCallback(const I2C_HandleTypeDef *handle) -> void;
 
-	static MyMain *getInstance();
+	static auto getInstance() -> MyMain *;
 
 private:
 	MyMain();

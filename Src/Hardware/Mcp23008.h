@@ -1,7 +1,3 @@
-//
-// Created by koscum on 12/07/2021.
-//
-
 #ifndef AIRSOFTGAMECONTROLLER_MCP23008_H
 #define AIRSOFTGAMECONTROLLER_MCP23008_H
 
@@ -31,23 +27,23 @@ public:
 
 	Mcp23008(const Mcp23008 &) = delete;
 
-	Mcp23008 &operator=(const Mcp23008 &) = delete;
+	auto operator=(const Mcp23008 &) -> Mcp23008 & = delete;
 
-	void init();
+	auto init() -> void;
 
-	[[nodiscard]] uint8_t getGpio() const;
+	[[nodiscard]] auto getGpio() const -> uint8_t;
 
-	[[nodiscard]] uint8_t getMode() const;
+	[[nodiscard]] auto getMode() const -> uint8_t;
 
-	void setGpio(uint8_t gpio,
-	             const std::function<void()> *callback = nullptr);
+	auto setGpio(uint8_t gpio,
+	             const std::function<void()> *callback = nullptr) -> void;
 
-	void setMode(uint8_t mode,
-	             const std::function<void()> *callback = nullptr);
+	auto setMode(uint8_t mode,
+	             const std::function<void()> *callback = nullptr) -> void;
 
-	void readGpio(const std::function<void()> *callback = nullptr);
+	auto readGpio(const std::function<void()> *callback = nullptr) -> void;
 
-	void readMode(const std::function<void()> *callback = nullptr);
+	auto readMode(const std::function<void()> *callback = nullptr) -> void;
 
 	static const uint8_t MCP23008_GPIO_MODE_INPUT;
 	static const uint8_t MCP23008_GPIO_MODE_OUTPUT;

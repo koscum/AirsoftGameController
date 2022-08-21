@@ -1,7 +1,3 @@
-//
-// Created by koscum on 29/06/2021.
-//
-
 #include <i2c.h>
 #include "I2cController.h"
 #include "stm32f4xx_hal_i2c.h"
@@ -16,27 +12,27 @@ I2cController::I2cRequest::I2cRequest(Type _type,
 
 I2cController::I2cRequest::~I2cRequest() noexcept = default;
 
-I2cController::I2cRequest::Type I2cController::I2cRequest::getType() const
+auto I2cController::I2cRequest::getType() const -> I2cController::I2cRequest::Type
 {
 	return type;
 }
 
-uint16_t I2cController::I2cRequest::getAddress() const
+auto I2cController::I2cRequest::getAddress() const -> uint16_t
 {
 	return address;
 }
 
-uint16_t I2cController::I2cRequest::getRegisterAddress() const
+auto I2cController::I2cRequest::getRegisterAddress() const -> uint16_t
 {
 	return registerAddress;
 }
 
-I2cController::I2cRequest::State I2cController::I2cRequest::getState() const
+auto I2cController::I2cRequest::getState() const -> I2cController::I2cRequest::State
 {
 	return state;
 }
 
-void I2cController::I2cRequest::setState(State _state)
+auto I2cController::I2cRequest::setState(State _state) -> void
 {
 	state = _state;
 }
@@ -64,17 +60,17 @@ I2cController::I2cRequestRx::~I2cRequestRx() noexcept
 	delete callback;
 }
 
-uint16_t I2cController::I2cRequestRx::getSize() const
+auto I2cController::I2cRequestRx::getSize() const -> uint16_t
 {
 	return size;
 }
 
-uint8_t *I2cController::I2cRequestRx::getBuffer()
+auto I2cController::I2cRequestRx::getBuffer() -> uint8_t *
 {
 	return buffer;
 }
 
-void I2cController::I2cRequestRx::done()
+auto I2cController::I2cRequestRx::done() -> void
 {
 	if (callback != nullptr)
 	{
@@ -111,17 +107,17 @@ I2cController::I2cRequestTx::~I2cRequestTx() noexcept
 	delete callback;
 }
 
-std::vector<uint8_t> *I2cController::I2cRequestTx::getData() const
+auto I2cController::I2cRequestTx::getData() const -> std::vector<uint8_t> *
 {
 	return data;
 }
 
-void I2cController::I2cRequestTx::done()
+auto I2cController::I2cRequestTx::done() -> void
 {
 	if (callback != nullptr) (*callback)();
 }
 
-bool I2cController::request(I2cRequest *_request)
+auto I2cController::request(I2cRequest *_request) -> bool
 {
 	if (requestQueue.size() < REQUEST_QUEUE_LIMIT)
 	{
@@ -136,7 +132,7 @@ bool I2cController::request(I2cRequest *_request)
 	return false;
 }
 
-void I2cController::tick()
+auto I2cController::tick() -> void
 {
 	if (!requestQueue.empty())
 	{
@@ -204,7 +200,7 @@ void I2cController::tick()
 	}
 }
 
-void I2cController::requestCompleted()
+auto I2cController::requestCompleted() -> void
 {
 	if (!requestQueue.empty())
 	{
@@ -214,8 +210,8 @@ void I2cController::requestCompleted()
 	}
 }
 
-void I2cController::masterTransmit(uint16_t _address,
-                                   std::vector<uint8_t> *_data)
+auto I2cController::masterTransmit(uint16_t _address,
+                                   std::vector<uint8_t> *_data) -> void
 {
 	HAL_I2C_Master_Transmit_DMA(&hi2c1,
 	                            _address << 1,
@@ -223,9 +219,9 @@ void I2cController::masterTransmit(uint16_t _address,
 	                            _data->size());
 }
 
-void I2cController::memoryWrite(uint16_t _address,
+auto I2cController::memoryWrite(uint16_t _address,
                                 uint16_t _registerAddress,
-                                std::vector<uint8_t> *_data)
+                                std::vector<uint8_t> *_data) -> void
 {
 	HAL_I2C_Mem_Write_DMA(&hi2c1,
 	                      _address << 1,
@@ -235,9 +231,9 @@ void I2cController::memoryWrite(uint16_t _address,
 	                      _data->size());
 }
 
-void I2cController::masterReceive(uint16_t _address,
+auto I2cController::masterReceive(uint16_t _address,
                                   uint8_t *_buffer,
-                                  uint16_t _size)
+                                  uint16_t _size) -> void
 {
 	HAL_I2C_Master_Receive_DMA(&hi2c1,
 	                           _address << 1,
@@ -245,10 +241,10 @@ void I2cController::masterReceive(uint16_t _address,
 	                           _size);
 }
 
-void I2cController::memoryRead(uint16_t _address,
+auto I2cController::memoryRead(uint16_t _address,
                                uint16_t _registerAddress,
                                uint8_t *_buffer,
-                               uint16_t _size)
+                               uint16_t _size) -> void
 {
 	HAL_I2C_Mem_Read_DMA(&hi2c1,
 	                     _address << 1,
@@ -258,7 +254,7 @@ void I2cController::memoryRead(uint16_t _address,
 	                     _size);
 }
 
-I2cController *I2cController::getInstance()
+auto I2cController::getInstance() -> I2cController *
 {
 	if (!instance) instance = new I2cController();
 
