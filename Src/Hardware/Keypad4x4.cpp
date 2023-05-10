@@ -3,7 +3,8 @@
 
 Keypad4x4::Keypad4x4(uint16_t address) :
 		mcp23008(Mcp23008(address)),
-		state(std::array<KeyState, 16>{KeyState::RELEASED}) {}
+		state(std::array<KeyState, 16>{KeyState::RELEASED})
+{}
 
 auto Keypad4x4::init() -> void
 {
@@ -30,8 +31,9 @@ auto Keypad4x4::tick() -> void
 						}
 
 						if (i == 3)
-							mcp23008.
-									        ready();
+						{
+							mcp23008.ready();
+						}
 					}
 			));
 		}

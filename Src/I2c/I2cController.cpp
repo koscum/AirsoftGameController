@@ -8,7 +8,8 @@ I2cController::I2cRequest::I2cRequest(Type _type,
 		type(_type),
 		address(_address),
 		registerAddress(_registerAddress),
-		state(State::READY) {}
+		state(State::READY)
+{}
 
 I2cController::I2cRequest::~I2cRequest() noexcept = default;
 
@@ -43,7 +44,8 @@ I2cController::I2cRequestRx::I2cRequestRx(uint16_t _address,
 		I2cRequest(I2cRequest::Type::RX, _address, 0x00),
 		buffer(new uint8_t[_size]{0x0}),
 		size(_size),
-		callback(_callback) {}
+		callback(_callback)
+{}
 
 I2cController::I2cRequestRx::I2cRequestRx(uint16_t _address,
                                           uint16_t _registerAddress,
@@ -52,7 +54,8 @@ I2cController::I2cRequestRx::I2cRequestRx(uint16_t _address,
 		I2cRequest(I2cRequest::Type::RX_MEM, _address, _registerAddress),
 		buffer(new uint8_t[_size]{0x0}),
 		size(_size),
-		callback(_callback) {}
+		callback(_callback)
+{}
 
 I2cController::I2cRequestRx::~I2cRequestRx() noexcept
 {
@@ -89,7 +92,8 @@ I2cController::I2cRequestTx::I2cRequestTx(uint16_t _address,
 		           _address,
 		           0x00),
 		data(_data),
-		callback(_callback) {}
+		callback(_callback)
+{}
 
 I2cController::I2cRequestTx::I2cRequestTx(uint16_t _address,
                                           uint16_t _registerAddress,
@@ -99,7 +103,8 @@ I2cController::I2cRequestTx::I2cRequestTx(uint16_t _address,
 		           _address,
 		           _registerAddress),
 		data(_data),
-		callback(_callback) {}
+		callback(_callback)
+{}
 
 I2cController::I2cRequestTx::~I2cRequestTx() noexcept
 {
@@ -124,7 +129,8 @@ auto I2cController::request(I2cRequest *_request) -> bool
 		requestQueue.push(_request);
 
 		return true;
-	} else
+	}
+	else
 	{
 		HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET);
 	}

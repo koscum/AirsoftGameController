@@ -3,7 +3,8 @@
 
 LedBackpack::LedBackpack(const uint16_t _address) :
 		I2cComponent(_address),
-		displayBuffer(std::array<uint8_t, 8>{0x00}) {}
+		displayBuffer(std::array<uint8_t, 8>{0x00})
+{}
 
 auto LedBackpack::begin() -> void
 {

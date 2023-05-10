@@ -2,7 +2,8 @@
 #include "SevenSegment.h"
 
 SevenSegment::SevenSegment(uint16_t _address) :
-		LedBackpack(_address) {}
+		LedBackpack(_address)
+{}
 
 auto SevenSegment::setDigit(uint8_t _position, uint8_t _value) -> void
 {
@@ -13,8 +14,10 @@ auto SevenSegment::setDigit(uint8_t _position, uint8_t _value) -> void
 
 auto SevenSegment::setDot(uint8_t _position, bool _value) -> void
 {
-	if (_value) displayBuffer[digitPositionToDisplayBufferIndex(_position)] |= DOT_ON;
-	else displayBuffer[digitPositionToDisplayBufferIndex(_position)] &= ~DOT_ON;
+	if (_value)
+	{ displayBuffer[digitPositionToDisplayBufferIndex(_position)] |= DOT_ON; }
+	else
+	{ displayBuffer[digitPositionToDisplayBufferIndex(_position)] &= ~DOT_ON; }
 }
 
 auto SevenSegment::setColon(bool _value) -> void

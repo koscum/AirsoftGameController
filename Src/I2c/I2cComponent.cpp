@@ -3,7 +3,8 @@
 
 I2cComponent::I2cComponent(uint16_t _address) :
 		address(_address),
-		isBusy(false) {}
+		isBusy(false)
+{}
 
 auto I2cComponent::busy() -> bool
 {

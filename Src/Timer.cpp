@@ -41,8 +41,10 @@ auto Timer::stop() -> void
 auto Timer::reset() -> void
 {
 	previousTimestamp = HAL_GetTick();
-	if (countUp) value = 0;
-	else value = target;
+	if (countUp)
+	{ value = 0; }
+	else
+	{ value = target; }
 }
 
 auto Timer::setValue(int64_t _value) -> void
@@ -69,8 +71,10 @@ auto Timer::advanceTimer() -> void
 
 auto Timer::finish() -> void
 {
-	if (repeat) reset();
-	else stop();
+	if (repeat)
+	{ reset(); }
+	else
+	{ stop(); }
 
 	TimerManager::getInstance()->finish(this);
 }

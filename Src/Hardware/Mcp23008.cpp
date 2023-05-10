@@ -3,7 +3,8 @@
 Mcp23008::Mcp23008(uint16_t address) :
 		I2cComponent(address),
 		mode(MCP23008_GPIO_MODE_INPUT),
-		gpio(0x00) {}
+		gpio(0x00)
+{}
 
 auto Mcp23008::init() -> void
 {
