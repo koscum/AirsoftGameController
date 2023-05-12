@@ -60,7 +60,7 @@ void SystemClock_Config(void);
 /* USER CODE BEGIN 0 */
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
-	cppWrapperTimCallback(htim);
+  cppWrapperTimCallback(htim);
 }
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
@@ -70,32 +70,38 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 
 void HAL_I2C_MasterTxCpltCallback(I2C_HandleTypeDef *hi2c)
 {
-	cppWrapperI2cCpltCallback(hi2c, 0U);
+	cppWrapperI2cCpltCallback(hi2c,
+	                          0U);
 }
 
 void HAL_I2C_MasterRxCpltCallback(I2C_HandleTypeDef *hi2c)
 {
-	cppWrapperI2cCpltCallback(hi2c, 0U);
+	cppWrapperI2cCpltCallback(hi2c,
+	                          0U);
 }
 
 void HAL_I2C_MemTxCpltCallback(I2C_HandleTypeDef *hi2c)
 {
-	cppWrapperI2cCpltCallback(hi2c, 0U);
+	cppWrapperI2cCpltCallback(hi2c,
+	                          0U);
 }
 
 void HAL_I2C_MemRxCpltCallback(I2C_HandleTypeDef *hi2c)
 {
-	cppWrapperI2cCpltCallback(hi2c, 0U);
+	cppWrapperI2cCpltCallback(hi2c,
+	                          0U);
 }
 
 void HAL_I2C_ErrorCallback(I2C_HandleTypeDef *hi2c)
 {
-	cppWrapperI2cCpltCallback(hi2c, 1U);
+	cppWrapperI2cCpltCallback(hi2c,
+	                          1U);
 }
 
 void HAL_I2C_AbortCpltCallback(I2C_HandleTypeDef *hi2c)
 {
-	cppWrapperI2cCpltCallback(hi2c, 2U);
+	cppWrapperI2cCpltCallback(hi2c,
+	                          2U);
 }
 /* USER CODE END 0 */
 
