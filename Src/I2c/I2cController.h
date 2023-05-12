@@ -9,10 +9,12 @@
 class I2cController
 {
 public:
-	enum class State
+	enum class Status
 	{
-		READY,
+		OK,
+		ERROR,
 		BUSY,
+		TIMEOUT,
 	};
 
 	class I2cRequest
@@ -31,6 +33,7 @@ public:
 			READY,
 			IN_PROGRESS,
 			COMPLETED,
+			ERROR,
 		};
 
 		virtual ~I2cRequest() noexcept;
@@ -117,7 +120,7 @@ public:
 
 	auto tick() -> void;
 
-	auto requestCompleted() -> void;
+	auto requestCompleted(uint8_t error) -> void;
 
 	[[nodiscard]] static auto getInstance() -> I2cController *;
 
@@ -125,20 +128,20 @@ private:
 	I2cController();
 
 	auto masterTransmit(uint16_t _address,
-	                    std::vector<uint8_t> *_data) -> void;
+	                    std::vector<uint8_t> *_data) -> Status;
 
 	auto memoryWrite(uint16_t _address,
 	                 uint16_t _registerAddress,
-	                 std::vector<uint8_t> *_data) -> void;
+	                 std::vector<uint8_t> *_data) -> Status;
 
 	auto masterReceive(uint16_t _address,
 	                   uint8_t *_buffer,
-	                   uint16_t _size) -> void;
+	                   uint16_t _size) -> Status;
 
 	auto memoryRead(uint16_t _address,
 	                uint16_t _registerAddress,
 	                uint8_t *_buffer,
-	                uint16_t _size) -> void;
+	                uint16_t _size) -> Status;
 
 	std::queue<I2cRequest *> requestQueue;
 

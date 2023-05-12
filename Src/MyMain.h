@@ -24,7 +24,7 @@ public:
 
 	auto timCallback(const TIM_HandleTypeDef *handle) -> void;
 
-	auto i2cCompletedCallback(const I2C_HandleTypeDef *handle) -> void;
+	auto i2cCompletedCallback(const I2C_HandleTypeDef *handle, uint8_t error) -> void;
 
 	static auto getInstance() -> MyMain *;
 
@@ -33,6 +33,8 @@ private:
 
 	std::atomic_bool doTimerTick = false;
 	std::atomic_bool doI2cRequestCompleted = false;
+
+	std::atomic_uint8_t i2cError = 0U;
 
 	bool exitCondition = false;
 

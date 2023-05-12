@@ -126,7 +126,7 @@ auto MyMain::main() -> void
 		}
 		if (doI2cRequestCompleted.exchange(false))
 		{
-			i2cController->requestCompleted();
+			i2cController->requestCompleted(i2cError.exchange(0U));
 		}
 
 		i2cController->tick();
@@ -157,9 +157,13 @@ auto MyMain::timCallback(const TIM_HandleTypeDef *handle) -> void
 	if (handle == &htim10) doTimerTick = true;
 }
 
-auto MyMain::i2cCompletedCallback(const I2C_HandleTypeDef *handle) -> void
+auto MyMain::i2cCompletedCallback(const I2C_HandleTypeDef *handle, uint8_t error) -> void
 {
-	if (handle == &hi2c1) doI2cRequestCompleted = true;
+	if (handle == &hi2c1)
+	{
+		doI2cRequestCompleted = true;
+		i2cError = error;
+	}
 }
 
 auto MyMain::getInstance() -> MyMain *

@@ -21,7 +21,7 @@ void cppWrapperTimCallback(TIM_HandleTypeDef *handle)
 	MyMain::getInstance()->timCallback(handle);
 }
 
-void cppWrapperI2cCpltCallback(I2C_HandleTypeDef *handle)
+void cppWrapperI2cCpltCallback(I2C_HandleTypeDef *handle, uint8_t error)
 {
-	MyMain::getInstance()->i2cCompletedCallback(handle);
+	MyMain::getInstance()->i2cCompletedCallback(handle, error);
 }
